@@ -1,0 +1,964 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.2draft" version="1.2" xmlns:viz="http://www.gexf.net/1.2draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd">
+  <meta lastmodifieddate="2015-01-10">
+    <creator>Gephi 0.8.1</creator>
+    <description></description>
+  </meta>
+  <graph defaultedgetype="directed" mode="static">
+    <attributes class="node" mode="static">
+      <attribute id="Property" title="Property" type="string"></attribute>
+      <attribute id="indegree" title="连入度" type="integer">
+        <default>0</default>
+      </attribute>
+      <attribute id="outdegree" title="连出度" type="integer">
+        <default>0</default>
+      </attribute>
+      <attribute id="degree" title="度" type="integer">
+        <default>0</default>
+      </attribute>
+    </attributes>
+    <nodes>
+      <node id="web" label="web">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="0"></attvalue>
+          <attvalue for="outdegree" value="16"></attvalue>
+          <attvalue for="degree" value="16"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="878.4969" y="-1077.307" z="0.0"></viz:position>
+        <viz:color r="234" g="61" b="245"></viz:color>
+      </node>
+      <node id="rail" label="rail">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="4"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="542.3131" y="-1077.0808" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="ssl" label="ssl">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="855.62775" y="-1297.1792" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="ssh" label="ssh">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="3"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="575.77216" y="-784.95807" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="html" label="html">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="1171.0342" y="-923.5619" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="websit" label="websit">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="864.91565" y="-1214.9626" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="css3" label="css3">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="2"></attvalue>
+          <attvalue for="degree" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="1019.66656" y="-895.6844" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="javascript" label="javascript">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="914.48737" y="-807.0683" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="php" label="php">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="977.90784" y="-1217.0525" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="socket" label="socket">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="2"></attvalue>
+          <attvalue for="degree" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="1183.1293" y="-1263.7117" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="web-based" label="web-based">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="762.9139" y="-1267.0022" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="asp.net" label="asp.net">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="719.3012" y="-698.7134" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="coursera" label="coursera">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1002.5534" y="-1428.3383" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="http" label="http">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="735.0877" y="-1082.6832" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="proxy" label="proxy">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="722.40375" y="-1188.5479" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="network" label="network">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1017.1818" y="-1070.2671" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="game" label="game">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="0"></attvalue>
+          <attvalue for="outdegree" value="2"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="1376.4962" y="-2244.641" z="0.0"></viz:position>
+        <viz:color r="234" g="61" b="245"></viz:color>
+      </node>
+      <node id="rpg" label="rpg">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1451.1998" y="-2419.69" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="minecraft" label="minecraft">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1275.0405" y="-2002.7468" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="language" label="language">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="0"></attvalue>
+          <attvalue for="outdegree" value="2"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="677.7773" y="-302.36337" z="0.0"></viz:position>
+        <viz:color r="234" g="61" b="245"></viz:color>
+      </node>
+      <node id="script" label="script">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="5"></attvalue>
+          <attvalue for="degree" value="6"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="859.6677" y="-639.4294" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="compile" label="compile">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="6"></attvalue>
+          <attvalue for="degree" value="7"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="465.80515" y="-14.643724" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="framework" label="framework">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="0"></attvalue>
+          <attvalue for="outdegree" value="3"></attvalue>
+          <attvalue for="degree" value="3"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="359.25504" y="-952.0415" z="0.0"></viz:position>
+        <viz:color r="234" g="61" b="245"></viz:color>
+      </node>
+      <node id="mvc" label="mvc">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="103.99634" y="-1010.2655" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="apple" label="apple">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="0"></attvalue>
+          <attvalue for="outdegree" value="2"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="632.4314" y="862.8883" z="0.0"></viz:position>
+        <viz:color r="234" g="61" b="245"></viz:color>
+      </node>
+      <node id="mobile" label="mobile">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="607.36536" y="1084.6628" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="mac" label="mac">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="2"></attvalue>
+          <attvalue for="degree" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="659.4649" y="606.8485" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="api" label="api">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="0"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="-9.281696" y="-1638.3809" z="0.0"></viz:position>
+        <viz:color r="234" g="61" b="245"></viz:color>
+      </node>
+      <node id="boostrap" label="boostrap">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="123.317184" y="-1495.9402" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="robot" label="robot">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="0"></attvalue>
+          <attvalue for="outdegree" value="6"></attvalue>
+          <attvalue for="degree" value="6"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="-919.8133" y="915.89233" z="0.0"></viz:position>
+        <viz:color r="234" g="61" b="245"></viz:color>
+      </node>
+      <node id="firmware" label="firmware">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="-898.4161" y="1062.3306" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="logic" label="logic">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="-1045.2256" y="839.8748" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="model" label="model">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="-1023.9295" y="994.4148" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="algorithm" label="algorithm">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="-1165.7542" y="964.3059" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="security" label="security">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="-1070.3821" y="1120.2983" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="visual" label="visual">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="-594.22015" y="698.1387" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="system" label="system">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="0"></attvalue>
+          <attvalue for="outdegree" value="2"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="852.7561" y="900.964" z="0.0"></viz:position>
+        <viz:color r="234" g="61" b="245"></viz:color>
+      </node>
+      <node id="linux" label="linux">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="3"></attvalue>
+          <attvalue for="degree" value="4"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="1025.4434" y="1174.8544" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="library" label="library">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="0"></attvalue>
+          <attvalue for="outdegree" value="2"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="309.48386" y="-1305.2229" z="0.0"></viz:position>
+        <viz:color r="234" g="61" b="245"></viz:color>
+      </node>
+      <node id="application" label="application">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="0"></attvalue>
+          <attvalue for="outdegree" value="5"></attvalue>
+          <attvalue for="degree" value="5"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="1148.9167" y="-1696.1938" z="0.0"></viz:position>
+        <viz:color r="234" g="61" b="245"></viz:color>
+      </node>
+      <node id="dropbox" label="dropbox">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1268.1508" y="-1848.0605" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="facebook" label="facebook">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1159.1602" y="-1889.371" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="html5" label="html5">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="1457.7136" y="-896.33887" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="layout" label="layout">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1213.7795" y="-811.0706" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="bootstrap" label="bootstrap">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1110.3336" y="-1136.285" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="node.js" label="node.js">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1009.5383" y="-643.7161" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="socket.io" label="socket.io">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1388.2107" y="-1331.4302" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="websocket" label="websocket">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1329.0923" y="-1414.3322" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="python" label="python">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="935.89154" y="-467.65643" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="xml" label="xml">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="1074.9579" y="-730.13586" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="ruby" label="ruby">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="673.1016" y="-848.04614" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="c++" label="c++">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="95.851364" y="235.43045" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="swift" label="swift">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="532.56445" y="319.47482" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="objective-c" label="objective-c">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="583.3974" y="302.93158" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="java" label="java">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="488.2914" y="-392.41507" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="c#" label="c#">
+        <attvalues>
+          <attvalue for="Property" value="source"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="1"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="8.862799"></viz:size>
+        <viz:position x="582.8911" y="-344.11258" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="haskell" label="haskell">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="358.64423" y="84.33355" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="spring" label="spring">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="-81.79102" y="-1058.3223" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="iphone" label="iphone">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="589.6215" y="1254.3431" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="matlab" label="matlab">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="-1343.051" y="1009.16327" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="authentication" label="authentication">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="-1184.5632" y="1262.5493" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="opengl" label="opengl">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="2"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="-257.09268" y="472.0379" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="gui" label="gui">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1028.9617" y="1350.7717" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="shell" label="shell">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1182.1783" y="1252.0999" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="kernel" label="kernel">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1126.0876" y="1338.3506" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+      <node id="dom" label="dom">
+        <attvalues>
+          <attvalue for="Property" value="target"></attvalue>
+          <attvalue for="indegree" value="1"></attvalue>
+          <attvalue for="outdegree" value="0"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+        </attvalues>
+        <viz:size value="4.0"></viz:size>
+        <viz:position x="1661.6305" y="-881.6635" z="0.0"></viz:position>
+        <viz:color r="160" g="146" b="245"></viz:color>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="web" target="rail" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="ssl" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="ssh" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="html" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="websit" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="css3" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="php" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="socket" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="web-based" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="asp.net" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="coursera" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="http" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="proxy" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="web" target="network" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="html" target="html5" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="css3" target="layout" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="css3" target="bootstrap" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="javascript" target="node.js" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="socket" target="socket.io" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="socket" target="websocket" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="game" target="rpg" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="game" target="minecraft" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="language" target="script" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="language" target="compile" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="script" target="css3" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="script" target="javascript" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="script" target="python" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="script" target="xml" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="script" target="ruby" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="compile" target="c++" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="compile" target="swift" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="compile" target="objective-c" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="compile" target="java" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="compile" target="c#" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="compile" target="haskell" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="framework" target="rail" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="framework" target="ssh" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="framework" target="mvc" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="mvc" target="spring" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="apple" target="mobile" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="apple" target="mac" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="mobile" target="iphone" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="mac" target="swift" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="mac" target="objective-c" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="api" target="boostrap" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="robot" target="firmware" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="robot" target="logic" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="robot" target="model" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="robot" target="algorithm" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="robot" target="security" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="robot" target="visual" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="algorithm" target="matlab" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="security" target="authentication" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="visual" target="opengl" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="system" target="mac" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="system" target="linux" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="linux" target="gui" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="linux" target="shell" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="linux" target="kernel" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="library" target="rail" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="library" target="boostrap" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="application" target="coursera" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="application" target="minecraft" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="application" target="dropbox" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="application" target="facebook" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="html5" target="dom" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="xml" target="html" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="ruby" target="rail" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="c++" target="opengl" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="java" target="ssh" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="c#" target="asp.net" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>
