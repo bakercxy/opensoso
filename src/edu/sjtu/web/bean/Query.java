@@ -3,6 +3,7 @@ package edu.sjtu.web.bean;
 import java.util.List;
 
 public class Query {
+	
 	String queryString;
 	List<Integer> scores;
 	public String getQueryString() {

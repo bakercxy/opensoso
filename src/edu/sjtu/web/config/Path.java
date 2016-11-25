@@ -2,10 +2,10 @@ package edu.sjtu.web.config;
 
 public class Path {
 	
-	public static String logPath = "F:\\greta-data\\log\\";
-	public static String dirPath = "F:\\greta-data\\dir\\";
-	public static String bigFilePath = "L:\\res\\";
-	public static String searchPath = "L:\\res\\";
+	public final static String logPath = "F:\\greta-data\\log\\";
+	public final static String dirPath = "F:\\greta-data\\dir\\";
+	public final static String bigFilePath = "L:\\res\\";
+	public final static String searchPath = "L:\\res\\";
 	
 //	public static String dirPath = "E:\\eclipse_j2ee_project\\Greta\\src\\";
 //	public static String quickPath = "E:\\eclipse_j2ee_project\\Greta\\src\\";

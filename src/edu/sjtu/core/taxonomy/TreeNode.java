@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TreeNode {
-   
 	private String nodeName;
     private String parent;
 	private List<String> children;

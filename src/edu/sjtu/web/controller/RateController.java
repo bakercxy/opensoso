@@ -1,10 +1,7 @@
 package edu.sjtu.web.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.List;
-
-import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
 
-import edu.sjtu.core.resource.QueryList;
 import edu.sjtu.core.resource.ScoreSaveRunnable;
 import edu.sjtu.web.bean.Query;
 

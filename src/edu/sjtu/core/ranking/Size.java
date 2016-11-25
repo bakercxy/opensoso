@@ -1,9 +1,6 @@
 package edu.sjtu.core.ranking;
 
 public class Size {
-//	public static int Repo = 1356;
-//	public static int Question = 2963;
-//	public static int Tag = 2559;
 
 	public static int Repo = 1666;
 	public static int Question = 2681;

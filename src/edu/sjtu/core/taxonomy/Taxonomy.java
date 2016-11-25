@@ -1,14 +1,14 @@
 package edu.sjtu.core.taxonomy;
 
-import Lab1.FileUtil;
-import Lab1.ILineHandler;
-import edu.sjtu.web.config.Path;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import Lab1.FileUtil;
+import Lab1.ILineHandler;
+import edu.sjtu.web.config.Path;
 
 public class Taxonomy {
 

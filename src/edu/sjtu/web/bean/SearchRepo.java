@@ -4,7 +4,6 @@ package edu.sjtu.web.bean;
  * Created by BakerCxy on 2015/11/21.
  */
 public class SearchRepo implements Cloneable{
-
     String reponame;
     int id;
     String des;

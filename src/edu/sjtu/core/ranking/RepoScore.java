@@ -7,7 +7,7 @@ import java.util.Comparator;
  */
 public class RepoScore implements Comparator {
 
-    int id;
+	int id;
     double score;
 
     public RepoScore(int id, double score) {

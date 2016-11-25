@@ -20,35 +20,9 @@
 			http://www.springframework.org/schema/data/repository/spring-repository-1.5.xsd">
 
 	<context:annotation-config />  <!-- 是否可以使用annotation方式实现IOC -->
-	<context:component-scan base-package="com.github.*">  <!-- 以下的配置对该包及其子包有效 -->
+	<context:component-scan base-package="edu.sjtu.*">  <!-- 以下的配置对该包及其子包有效 -->
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" /> 
 	</context:component-scan>
-	<!-- <aop:aspectj-autoproxy />  -->  <!-- 支持aop注解 -->
 	<tx:annotation-driven />
 	
-	<!-- 获取配置文件属性 -->  
-    <bean id="placeholderConfig"
-        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
-        <property name="location">  
-            <value>/WEB-INF/db.properties</value>  
-        </property>  
-    </bean>  
-	
-	<!-- Default bean name is 'mongo' -->
-	<mongo:mongo host="${datasource.host}" port="${datasource.port}">  
-        <mongo:options connections-per-host="20"  
-            threads-allowed-to-block-for-connection-multiplier="20"  
-            auto-connect-retry="true" />  
-    </mongo:mongo>  
-    
-   <!-- mongo的工厂，通过它来取得mongo实例,dbname为mongodb的数据库名，没有的话会自动创建 -->  
-    <mongo:db-factory dbname="${datasource.dbname}" mongo-ref="mongo"/>  
-    
-    
-    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">  
-     	<constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>  
-    <!--   <constructor-arg ref="mongo" />   -->  
-     <!--     <constructor-arg name="databaseName" value="${datasource.dbname}" />   -->  
-    </bean>
-
 </beans>
