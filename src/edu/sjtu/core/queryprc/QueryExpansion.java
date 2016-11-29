@@ -29,39 +29,38 @@ public class QueryExpansion {
 
 	public Map<String,Double> getWeightedQuery(String sentence){
 
-        Map<String,Double> resultMap = new HashMap<String,Double>();
-
+        Map<String,Double> weightedTermMap = new HashMap<String,Double>();
         WordProcess wp = new WordProcess(resource);
         WordTable wt = new WordTable(resource.getTaxonomy());
         wp.devideWords(sentence);  //将sentence分成keyword，otherword和textword
 
         //特征词处理
-        for(String t : wp.getKeyWords())
+        for(String keyword : wp.getKeyWords())
         {
-            Map<String,Double> wordTable = wt.getWordTable(t);
-
-            for(String w : wordTable.keySet()) {
-                if (!resultMap.containsKey(w))
-                    resultMap.put(w, 0.0);
-                double cw = resultMap.get(w);
-                cw += wordTable.get(w);
-                resultMap.put(w, cw);
+            Map<String,Double> relatedWords = wt.getRelatedWords(keyword);
+            for(String word : relatedWords.keySet()) {
+                if (!weightedTermMap.containsKey(word))
+                	weightedTermMap.put(word, 0.0);
+                
+                double cwt = weightedTermMap.get(word); //获取当前分值
+                cwt += weightedTermMap.get(word) + cwt - weightedTermMap.get(word) * cwt ;  //将分值与现有分值整合
+                weightedTermMap.put(word, cwt);
             }
         }
 
         //一般词处理
         for(String t : wp.getOtherWords())
         {
-            resultMap.put(t,1.0);
+        	weightedTermMap.put(t,1.0);
         }
         
         //整体词处理
         for(String t : wp.getTextWords())
         {
-            resultMap.put(t,1.0);
+        	weightedTermMap.put(t,1.0);
         }
         
-        return resultMap;
+        return weightedTermMap;
     }
 
 

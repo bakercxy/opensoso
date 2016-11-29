@@ -31,7 +31,7 @@ public class WordTable {
 	}
 
 	// 构建与word相关的所有词的权值表
-	public Map<String,Double> getWordTable(String word) {
+	public Map<String,Double> getRelatedWords(String word) {
 		
 		Map<String,Double> resultMap = new HashMap<String, Double>();  //用于保存边权的map
 		

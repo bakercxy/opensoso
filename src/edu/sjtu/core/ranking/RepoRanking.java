@@ -1,8 +1,13 @@
 package edu.sjtu.core.ranking;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +28,8 @@ public class RepoRanking {
 
 	edu.sjtu.core.resource.Resource resource;
 	QueryExpansion queryExpansion;
-	Map<Integer,Double> starScore;
+	Map<Integer,Double> effects;
+	static double KS = 0.2, KF = 0.15, KU = 1000;
 
 	public edu.sjtu.core.resource.Resource getResource() {
 		return resource;
@@ -103,8 +109,8 @@ public class RepoRanking {
 					
 					double starscore = 1;
 					
-					if(starScore.containsKey(id))
-						starscore = starScore.get(id);
+					if(effects.containsKey(id))
+						starscore = effects.get(id);
 					
 					scores.put(id, currentscore + (wordVec.get(key) * w * (Math.log(key.split("\\s").length) * starscore + 1)));
 //					System.out.println(wordVec.get(key) * w);
@@ -148,8 +154,8 @@ public class RepoRanking {
 					
 					double starscore = 1;
 					
-					if(starScore.containsKey(id))
-						starscore = starScore.get(id);
+					if(effects.containsKey(id))
+						starscore = effects.get(id);
 					
 					scores.put(id, currentscore + wordVec.get(key) * w * starscore);
 //					int length = 0;
@@ -165,21 +171,59 @@ public class RepoRanking {
 		}
 		
 		for(int id : scores.keySet())
-			scores.put(id, scores.get(id) * (Math.log(hitcount.get(id)) + 1));
+		{
+			scores.put(id, scores.get(id) * hitcount.get(id));
+			scores.put(id, scores.get(id) * (Math.sqrt(hitcount.get(id))));
+//			scores.put(id, scores.get(id) * (Math.log(hitcount.get(id)) + 1));
+		}
+//			
 
 		return scores;
 	}
 
+	private void effectCompute(){
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String stringDate = "2015-07-31 00:00:00";
+		Date curDate;
+		try {
+			curDate = df.parse(stringDate);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			curDate = new Date(115,7,31);
+			e1.printStackTrace();
+		}
+		if(effects == null)
+		{
+			effects = new HashMap<Integer, Double>();
+			for(int id : resource.getRepos().keySet())
+			{
+				Date repoDate;
+				try {
+					repoDate = df.parse(resource.getRepos().get(id).getDate().replace("T", " ").replace("Z", " "));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					repoDate = new Date(115,1,1);
+					e.printStackTrace();
+				}
+				
+				int daydiff = 180;
+				try {
+					daydiff = daysBetween(repoDate, curDate);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				effects.put(id, (Math.log10(1.0+Math.sqrt(1.0 + KS*resource.getRepos().get(id).getStargazers()+KF*resource.getRepos().get(id).getForks())) + 1.0)*Math.pow(2.0, -daydiff/KU));
+			}
+		}
+	}
+	
+	
+	
 	public List<SearchRepo> rankScore(String query, int top) {	
 		query = query.toLowerCase();
 		Map<String, Double> wordVec = queryExpansion.getWeightedQuery(query);
-		
-		if(starScore == null)
-		{
-			starScore = new HashMap<Integer, Double>();
-			for(int id : resource.getRepos().keySet())
-				starScore.put(id, Math.log10(1.0 + Math.sqrt(1.0 + resource.getRepos().get(id).getStargazers())) + 1.0);
-		}
+		effectCompute();
 		
 //		Map<Integer, Double> m1 = computeCharacterSim(wordVec);
 //		Map<Integer, Double> m2 = computeTextSim(wordVec);
@@ -188,34 +232,63 @@ public class RepoRanking {
 		Map<Integer, Double> m2 = zeroOne(computeTextSim(wordVec));
 		Map<Integer, Double> m3 = zeroOne(computeTitleSim(query));
 
-		RepoScore[] repoScores = new RepoScore[Size.Raw_Repo];
+		RepoScore[] repoRelavences = new RepoScore[Size.Raw_Repo];
 		for (int i = 0; i < Size.Raw_Repo; i++) {
 			int id = i + 1;
 			if(resource.getRepos().containsKey(id)){
 				if(!m1.containsKey(id) && !m2.containsKey(id) && !m3.containsKey(id))
-					repoScores[i] = new RepoScore(id,0.0);
+					repoRelavences[i] = new RepoScore(id,0.0);
 				else
 				{
 //					double weight = Math.log10(1 + Math.log10(1.0 + resource.getRepos().get(id).getStargazers())) + 1.0;
-					repoScores[i] = new RepoScore(id, 
+//					repoScores[i] = new RepoScore(id, 
+//							((1.0 + (m1.containsKey(id) ? m1.get(id): 0.0))
+//							* (1.0 + (m2.containsKey(id) ? m2.get(id) : 0.0))
+//							* (1.0 + (m3.containsKey(id) ? m3.get(id) : 0.0)))
+//							* (starScore.containsKey(id) ? starScore.get(id) : 1.0));
+					repoRelavences[i] = new RepoScore(id, 
 							((1.0 + (m1.containsKey(id) ? m1.get(id): 0.0))
 							* (1.0 + (m2.containsKey(id) ? m2.get(id) : 0.0))
-							* (1.0 + (m3.containsKey(id) ? m3.get(id) : 0.0)))
-							* (starScore.containsKey(id) ? starScore.get(id) : 1.0));
+							* (1.0 + (m3.containsKey(id) ? m3.get(id) : 0.0))));
 				}
 			}
 			else
-				repoScores[i] = new RepoScore(id,0.0);
+				repoRelavences[i] = new RepoScore(id,0.0);
+			
 		}
 
-		Arrays.sort(repoScores, new RepoScore());
+		Arrays.sort(repoRelavences, new RepoScore());
+		
+		//基于effect再排序
+		RepoScore[] repoScoresWithEffect = new RepoScore[top*2];
+		for(int i = 0; i < top*2;i++)
+		{
+//			System.out.println("rev_"+ (i+1) +": "+repoRelavences[i].getScore());
+			repoScoresWithEffect[i] = new RepoScore(repoRelavences[i].getId(),repoRelavences[i].getScore());
+			int repoId = repoRelavences[i].getId();
+			if(effects.containsKey(repoId))
+				repoScoresWithEffect[i].setScore(repoRelavences[i].getScore()*effects.get(repoId));
+		}
+		Arrays.sort(repoScoresWithEffect, new RepoScore());
+		
 		List<SearchRepo> result = new ArrayList<SearchRepo>();
-
-		for (int i = 0; i < top; i++) {
+//		for (int i = 0; i < top; i++) {
+//			SearchRepo r;
+//			try {
+//				r = (SearchRepo) resource.getRepos().get(repoScores[i].getId()).clone();
+//				System.out.println((i+1) + " : " + repoScores[i].getScore());
+//				result.add(HighLight.highLight(r,query));
+//			} catch (CloneNotSupportedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		
+		for (int i = 0; i < top*2; i++) {
 			SearchRepo r;
 			try {
-				r = (SearchRepo) resource.getRepos().get(repoScores[i].getId()).clone();
-				System.out.println((i+1) + " : " + repoScores[i].getScore());
+				r = (SearchRepo) resource.getRepos().get(repoScoresWithEffect[i].getId()).clone();
+//				System.out.println("score_"+ (i+1) + " : " + repoScoresWithEffect[i].getScore() + " effect: "+effects.get(repoScoresWithEffect[i].getId()));
 				result.add(HighLight.highLight(r,query));
 			} catch (CloneNotSupportedException e) {
 				// TODO Auto-generated catch block
@@ -307,7 +380,27 @@ public class RepoRanking {
 		return map;
 	}
 
-	
+	/**  
+     * 计算两个日期之间相差的天数  
+     * @param smdate 较小的时间 
+     * @param bdate  较大的时间 
+     * @return 相差天数 
+     * @throws ParseException  
+     */    
+    public static int daysBetween(Date smdate,Date bdate) throws ParseException    
+    {    
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
+        smdate=sdf.parse(sdf.format(smdate));  
+        bdate=sdf.parse(sdf.format(bdate));  
+        Calendar cal = Calendar.getInstance();    
+        cal.setTime(smdate);    
+        long time1 = cal.getTimeInMillis();                 
+        cal.setTime(bdate);    
+        long time2 = cal.getTimeInMillis();         
+        long between_days=(time2-time1)/(1000*3600*24);  
+            
+       return Integer.parseInt(String.valueOf(between_days));           
+    }    
 
 	// public static void main(String[] args) {
 	// Resource r = new Resource();
