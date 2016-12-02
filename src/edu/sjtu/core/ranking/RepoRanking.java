@@ -11,12 +11,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
 import edu.sjtu.core.queryprc.QueryExpansion;
+import edu.sjtu.test.Graph;
+import edu.sjtu.test.GraphByMatrix;
 import edu.sjtu.web.bean.SearchRepo;
 import edu.sjtu.web.util.HighLight;
 
@@ -167,7 +170,6 @@ public class RepoRanking {
 //					* (Math.log(1+length) + 1)
 				}
 			}
-			
 		}
 		
 		for(int id : scores.keySet())
@@ -218,9 +220,15 @@ public class RepoRanking {
 		}
 	}
 	
-	
-	
-	public List<SearchRepo> rankScore(String query, int top) {	
+	public List<SearchRepo> rankScore(String query, int top) {
+		
+		System.out.print("query:" + query);
+		System.out.print("  size:" + top);
+		
+		GraphByMatrix graph = getAnalysisGraph(top);
+		
+		Date begin = new Date();
+		
 		query = query.toLowerCase();
 		Map<String, Double> wordVec = queryExpansion.getWeightedQuery(query);
 		effectCompute();
@@ -295,10 +303,47 @@ public class RepoRanking {
 				e.printStackTrace();
 			}
 		}
+		for(int i = 0; i < top; i++)
+		{
+			try {
+//				System.out.println("n_"+ i +"\t"+graph.Dijkstra(""+i));
+				graph.Dijkstra(""+i);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		Date end = new Date();
+		
+		System.out.println("  compute time: " + (end.getTime()-begin.getTime())/1000.0);
 
 		return result;
 	}
 
+	//一个用于模拟图分析的方法，用于计算时间效率
+	private GraphByMatrix getAnalysisGraph(int nodesize){
+		Random random = new Random();
+		String[] nodes = new String[nodesize];
+		for(int i = 0; i< nodesize; i++)
+			nodes[i] = ""+ i;
+		GraphByMatrix graph = new GraphByMatrix(Graph.DIRECTED_GRAPH, Graph.ADJACENCY_MATRIX, nodes.length);
+		for(String node : nodes)
+			graph.addVertex(node);  
+		
+		for(int i = 0; i < nodesize-1;i++)
+			for(int j = i+1; j < nodesize; j++)
+			{
+				if(random.nextBoolean())
+					graph.addEdge(nodes[i],nodes[j]);
+				else
+					graph.addEdge(nodes[j],nodes[i]);
+			}
+		return graph;
+	}
+	
+	
+	
 	// 计算编辑距离的方法
 	public static int getLevenshteinDistance(String s, String t) {
 		if (s == null || t == null) {

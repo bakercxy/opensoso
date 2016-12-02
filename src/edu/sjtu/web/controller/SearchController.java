@@ -56,12 +56,14 @@ public class SearchController {
 			e.printStackTrace();
 		}
 		query = query.trim();
+//		String[] ss = query.split(" ");
+//		query = query.substring(0, query.length()-ss[ss.length-1].length()).trim();
 		map.put("query", query);
-		System.out.println("query: " + query);
 		
 		Date d = new Date();
 		long l1 = d.getTime();
 		
+//		List result = repoRanking.rankScore(query, Integer.parseInt(ss[ss.length-1]));
 		List result = repoRanking.rankScore(query, 100);
 		
 		d = new Date();
