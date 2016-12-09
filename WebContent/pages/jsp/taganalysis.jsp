@@ -20,6 +20,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <title>G-Hunter</title>
 
@@ -49,47 +50,47 @@
 				<div class="row">
 					<div class="row row-lg-offset-10"></div>
 					<div class="center">
-						<img src="./images/bigsoso.png" class="img-responsive"
-							alt="Responsive image" width="400px">
+						<h3><Strong>标签评估系统</Strong></h3>
 					</div>
 				</div>
-				<div class="myjumbotron2"></div>
 				<div class="row row-lg-offset-4" style="height: 400px">
 					<div class="col-md-10 col-md-offset-1">
-
-						<!--  -->
-						<form name="searchform" id="searchform">
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="row">
-										<div class="col-lg-6 col-lg-offset-3">
-											<input id="queryText" name="query"
-												class="form-control input-lg" type="text"
-												placeholder="Please enter your interest">
+										<div class="row" id="title">
+											<div class="col-lg-8 col-lg-offset-2">
+												<font color="#000000"><Strong>Repository Name:</Strong> ${requestScope.title}</font><br/><br/><br/>
+												<div id = "repoid" value = "${requestScope.id}"><font color="#000000"><Strong>Repository ID:</Strong> ${requestScope.id}</font><br/><br/><br/>
+												<font color="#000000"><Strong>Language:</Strong> ${requestScope.lang}</font><br/><br/><br/>
+												<font color="#000000"><Strong>Description:</Strong> ${requestScope.des}</font><br/><br/><br/>
+												<font color="#000000"><Strong>Readme Text:</Strong> ${requestScope.rm}</font><br/><br/><br/>
+												<font color="#000000"><Strong>Tags:</Strong></font>
+												
+												<c:forEach items="${requestScope.tags}" var="obj" varStatus="vs">
+													<c:if test="${vs.index % 6 == '0'}">
+													<div class="checkbox">
+													</c:if>
+														<label> <input type="checkbox" id="blankCheckbox_${vs.index}" value="${obj}"> ${obj} </label>
+													<c:if test="${vs.index % 6 == '5' || vs.last}">
+													</div>
+													</c:if>
+												</c:forEach>
+												<input type="hidden" id="repoid" value="${requestScope.id}"/>
+											</div>
 										</div>
 									</div>
 
 									<div class="row row-lg-offset-3">
-										<div class="col-lg-6 col-lg-offset-3">
-										<div class="col-lg-3 col-lg-offset-1">
-											<button type="button" class="btn btn-info btn-lg"
-												onclick="return searchQuery()"
-												style="width: 160px; font-size: 22px">&nbsp&nbsp
-												SOSO! &nbsp&nbsp</button>
-										</div>
-										<div class="col-lg-3 col-lg-offset-2">
-											<button type="button" class="btn btn-info btn-lg"
-												onclick="return rateQuery()"
-												style="width: 160px; font-size: 22px">&nbsp&nbsp
-												Rate it! &nbsp&nbsp</button>
-										</div>
+										<div class="col-lg-4 col-lg-offset-4">
+											<button type="button" class="btn btn-warning"
+												onclick="return submit()"
+												style="width: 120px; font-size: 20px">
+												Submit</button>
 										</div>
 									</div>
 								</div>
-							</div>
-						</form>
-						<div class="myjumbotron2"></div>
-						<div class="row row-lg-offset-1"></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -116,29 +117,28 @@
 	<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 
 	<script type="text/javascript">
-		function searchQuery() {
-			if (trim($("#queryText").val()) == "")
-				return false;
-			else
+		function submit() {
+			var boxes = document.getElementsByTagName("input");
+			var val = [];
+			for(i=0;i<boxes.length;i++){
+		        if(boxes[i].checked == true){
+		            val.push(boxes[i].value);
+		        }
+		    }
+			if(val != "")
 			{
-				document.searchform.action="reposearch.do";
-				$("#searchform").submit();
+				 var id = $("#repoid").attr("value");
+				    $.post("submittaganalysis?tagresult=" + val + "&repoid=" + id, function(data) {
+				    	 	window.location.href="taganalysis.html"; 
+				    	});
 			}
+		   
+		    
+		    
+		//	document.searchform.action="submittaganalysis?selectedtags=" + val;
+		//	$("#searchform").submit();
 		}
 		
-		function rateQuery() {
-			if (trim($("#queryText").val()) == "")
-				return false;
-			else
-			{
-				document.searchform.action="reporate.do";
-				$("#searchform").submit();
-			}
-		}
-
-		function trim(str) { //删除左右两端的空格
-			return str.replace(/(^\s*)|(\s*$)/g, "");
-		}
 	</script>
 
 

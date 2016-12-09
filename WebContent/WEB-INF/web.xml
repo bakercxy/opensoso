@@ -47,9 +47,5 @@
         org.springframework.web.util.Log4jConfigListener
       </listener-class>
   </listener>
-  <listener>
-    <listener-class>
-        edu.sjtu.core.resource.SaveListener
-      </listener-class>
-  </listener>
+  
 </web-app>

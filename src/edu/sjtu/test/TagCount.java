@@ -9,7 +9,7 @@ import edu.sjtu.web.config.Path;
 public class TagCount {
 	public static void main(String[] args) {
 		FileUtil fu = new FileUtil();
-		fu.readFile(new File(Path.bigFilePath + "\\tagit.dat"), new ILineHandler() {
+		fu.readFile(new File(Path.bigResPath + "\\tagit.dat"), new ILineHandler() {
 			@Override
 			public void process(String line, int index) throws Exception {
 				// TODO Auto-generated method stub
