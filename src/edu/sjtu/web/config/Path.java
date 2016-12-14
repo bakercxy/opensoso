@@ -3,7 +3,6 @@ package edu.sjtu.web.config;
 public class Path {
 	
 //	public final static String logPath = "F:\\greta-data\\log\\";  //保存评分记录的位置
-//	public final static String dirPath = "F:\\greta-data\\dir\\";  //保存一般资源文件的位置
 //	public final static String bigResPath = "L:\\res\\";  //保存例如索引等超大文件的位置
 //	public final static String resPath = "L:\\res\\";  //保存
 	

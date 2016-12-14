@@ -11,6 +11,8 @@
 %>
 
 
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +24,13 @@
 <meta name="author" content="">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/docs.min.js"></script>
+	<script src="./js/showdown.js"></script>
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
 <title>G-Hunter</title>
 
 <!-- Bootstrap core CSS -->
@@ -31,8 +40,7 @@
 
 </head>
 
-<body style="background: #F5F5F5"
-	onload="document.getElementById('queryText').focus()">
+<body style="background: #F5F5F5">
 	<div class="container">
 		<%
   		//String templatePath = ".\\templates\\titlebar.tmp";//路径 ，比如d: 标示D盘
@@ -48,24 +56,23 @@
 		<div class="row ">
 			<div class="myjumbotron2">
 				<div class="row">
-					<div class="row row-lg-offset-10"></div>
 					<div class="center">
 						<h3><Strong>标签评估系统</Strong></h3>
 					</div>
 				</div>
-				<div class="row row-lg-offset-4" style="height: 400px">
+				<div class="row row-lg-offset-4">
 					<div class="col-md-10 col-md-offset-1">
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="row">
 										<div class="row" id="title">
 											<div class="col-lg-8 col-lg-offset-2">
-												<font color="#000000"><Strong>Repository Name:</Strong> ${requestScope.title}</font><br/><br/><br/>
-												<div id = "repoid" value = "${requestScope.id}"><font color="#000000"><Strong>Repository ID:</Strong> ${requestScope.id}</font><br/><br/><br/>
-												<font color="#000000"><Strong>Language:</Strong> ${requestScope.lang}</font><br/><br/><br/>
-												<font color="#000000"><Strong>Description:</Strong> ${requestScope.des}</font><br/><br/><br/>
-												<font color="#000000"><Strong>Readme Text:</Strong> ${requestScope.rm}</font><br/><br/><br/>
-												<font color="#000000"><Strong>Tags:</Strong></font>
+												<font size="3" color="#000000"><Strong>Repository Name:</Strong> ${requestScope.title}</font><br/><br/><br/>
+												<div id = "repoid" value = "${requestScope.id}"><font size="3" color="#000000"><Strong>Repository ID:</Strong> ${requestScope.id}</font></div><br/><br/><br/>
+												<font size="3" color="#000000"><Strong>Language:</Strong> ${requestScope.lang}</font><br/><br/><br/>
+												<font size="3" color="#000000"><Strong>Description:</Strong> ${requestScope.des}</font><br/><br/><br/>
+												<font size="3" color="#000000"><Strong>Readme Text:</Strong></font> <font size="3" id="readme">${requestScope.rm}</font><br/><br/><br/>
+												<font size="3" color="#000000"><Strong>Tags:</Strong></font>
 												
 												<c:forEach items="${requestScope.tags}" var="obj" varStatus="vs">
 													<c:if test="${vs.index % 6 == '0'}">
@@ -110,13 +117,21 @@
 	</footer>
 
 
-	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-	<script src="./js/bootstrap.min.js"></script>
-	<script src="./js/docs.min.js"></script>
-	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-	<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script type="text/javascript">
+	
+	$(function(){ 
+		var converter = new showdown.Converter();
+	    var text = $("#readme").text();
+	   // var text = '#hello, markdown!';
+	    var html = converter.makeHtml(text);
+	    $("#readme").html(html);
+	    
+	}); 
+
+	</script>
 
 	<script type="text/javascript">
+	
 		function submit() {
 			var boxes = document.getElementsByTagName("input");
 			var val = [];
@@ -132,16 +147,9 @@
 				    	 	window.location.href="taganalysis.html"; 
 				    	});
 			}
-		   
-		    
-		    
-		//	document.searchform.action="submittaganalysis?selectedtags=" + val;
-		//	$("#searchform").submit();
 		}
 		
 	</script>
-
-
 </body>
 </html>
 
