@@ -43,7 +43,7 @@ public class Taxonomy {
 
 		FileUtil fu = new FileUtil();
 		//构建树的边
-		fu.readFile(new File(Path.searchPath + "tree.res"), new ILineHandler() {
+		fu.readFile(new File(Path.resPath + "tree.res"), new ILineHandler() {
 			@Override
 			public void process(String s, int i) throws Exception {
 				String[] split = s.split(":");
@@ -53,7 +53,7 @@ public class Taxonomy {
 			}
 		});
 
-		fu.readFile(new File(Path.searchPath + "convince.res"), new ILineHandler() {
+		fu.readFile(new File(Path.resPath + "convince.res"), new ILineHandler() {
 			@Override
 			public void process(String s, int i) throws Exception {
 				String[] split = s.split(":");

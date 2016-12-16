@@ -97,17 +97,15 @@
 	</div>
 	<!-- /container -->
 	<footer class="footer ">
-
-		<div class="row footer-bottom">
+<div class="row footer-bottom">
 			<ul class="list-inline text-center">
-				<li><a href="#" target="_blank">About Us</a></li>
-				<li>Email:G-Hunter@yeah.net</li>
+				<li><a href="http://base.sjtu.edu.cn/home/doku.php?id=mem:xycai">About Me</a></li>
+				<li>Email:bakercxy@163.com</li>
 			</ul>
 			<ul class="list-inline text-center">
-				<li>Copyright 2014</li>
+				<li>Copyright 2014-2016</li>
 			</ul>
 		</div>
-
 	</footer>
 
 

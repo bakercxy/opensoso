@@ -8,14 +8,13 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
-import Lab1.FileUtil;
-import Lab1.ILineHandler;
-
 import com.alibaba.fastjson.JSONObject;
 
 import edu.sjtu.core.taxonomy.Taxonomy;
 import edu.sjtu.web.bean.SearchRepo;
 import edu.sjtu.web.util.Path;
+import edu.sjtu.web.util.FileUtil;
+import edu.sjtu.web.util.ILineHandler;
 
 /**
  * Created by BakerCxy on 2015/11/12.
@@ -52,24 +51,17 @@ public class Resource {
         return stopPunc;
     }
 
-    public FileUtil getFu() {
-        return fu;
-    }
-
     public Taxonomy getTaxonomy() {
         return taxonomy;
     }
-
-    FileUtil fu;
 
     public Map<Integer, SearchRepo> getRepos() {
         return repos;
     }
 
     public Resource(){
-        fu = new FileUtil();
         System.out.println("initializing stopwords ...");
-        fu.readFile(new File(Path.searchPath + "english_stopword.txt"), new ILineHandler() {
+        FileUtil.readFile(new File(Path.resPath + "english_stopword.txt"), new ILineHandler() {
             @Override
             public void process(String s, int i) throws Exception {
                 stopWord.add(s);
@@ -77,7 +69,7 @@ public class Resource {
         });
 
         System.out.println("initializing punctuations ...");
-        fu.readFile(new File(Path.searchPath + "english_punctuation.txt"), new ILineHandler() {
+        FileUtil.readFile(new File(Path.resPath + "english_punctuation.txt"), new ILineHandler() {
             @Override
             public void process(String s, int i) throws Exception {
                 stopPunc.add(s);
@@ -89,7 +81,7 @@ public class Resource {
 
         System.out.println("initializing tag table ...");
         tt = new HashMap<String, Map<Integer,Object>>();
-        fu.readFile(new File(Path.bigFilePath + "tagit.dat"), new ILineHandler() {
+        FileUtil.readFile(new File(Path.bigResPath + "tagit.dat"), new ILineHandler() {
             @Override
             public void process(String s, int i) throws Exception {
                 int index = s.indexOf(":");
@@ -103,7 +95,7 @@ public class Resource {
 
         tw = new HashMap<String, Map<Integer,Object>>();
         System.out.println("initializing word table ...");
-        fu.readFile(new File(Path.bigFilePath + "wordit.dat"), new ILineHandler() {
+        FileUtil.readFile(new File(Path.bigResPath + "wordit.dat"), new ILineHandler() {
             @Override
             public void process(String s, int i) throws Exception {
                 int index = s.indexOf(":");
@@ -116,7 +108,7 @@ public class Resource {
         System.out.println("initializing repoinfo ...");
         repos = new HashMap<Integer, SearchRepo>();
         title = new HashMap<String,Integer>();
-        fu.readFile(new File(Path.bigFilePath + "repoinfo.dat"), new ILineHandler() {
+        FileUtil.readFile(new File(Path.bigResPath + "repoinfo.dat"), new ILineHandler() {
             @Override
             public void process(String s, int i) throws Exception {
                 try {
@@ -132,7 +124,7 @@ public class Resource {
         
         System.out.println("initializing repoid ...");
         repoids = new HashMap<Integer,Integer>();
-        fu.readFile(new File(Path.bigFilePath + "repoid.dat"), new ILineHandler() {
+        FileUtil.readFile(new File(Path.bigResPath + "repoid.dat"), new ILineHandler() {
 			@Override
 			public void process(String s, int i) throws Exception {
 				int gitid = Integer.parseInt(s.split(":")[0]);
