@@ -9,17 +9,19 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
 import edu.sjtu.core.queryprc.QueryExpansion;
-import edu.sjtu.test.Graph;
-import edu.sjtu.test.GraphByMatrix;
+import edu.sjtu.graph.Graph;
+import edu.sjtu.graph.GraphByMatrix;
 import edu.sjtu.web.bean.SearchRepo;
 import edu.sjtu.web.util.HighLight;
 
@@ -34,6 +36,18 @@ public class RepoRanking {
 	Map<Integer,Double> effects;
 	static double KS = 0.2, KF = 0.15, KU = 1000;
 
+	public RepoRanking(edu.sjtu.core.resource.Resource resource, QueryExpansion queryExpansion)
+	{
+		super();
+		this.resource = resource;
+		this.queryExpansion = queryExpansion;
+	}
+	
+	public RepoRanking()
+	{
+		super();
+	}
+	
 	public edu.sjtu.core.resource.Resource getResource() {
 		return resource;
 	}
@@ -55,42 +69,47 @@ public class RepoRanking {
 
 	// 计算title相似度 (0~1)
 	public Map<Integer, Double> computeTitleSim(String query) {
-		String[] queries = query.split("[\\s\\-_]");
 		Map<Integer, Double> scores = new HashMap<Integer, Double>();
-
-		for (String repoName : resource.getTitle().keySet()) // 对每个repo进行title打分
+		double max = 0d;
+		for(int repoid : resource.getRepos().keySet())
 		{
-			String lowerRepoName = repoName.toLowerCase();
+			String lowerRepoName = resource.getRepos().get(repoid).getReponame().toLowerCase();
 			double titlesim = 0.0;
 			//最小编辑距离
 			double editsim = 1.0 / (double)(getLevenshteinDistance(query, lowerRepoName) + 1);
 			//从属关系
-			double coincidencesim = 0;
-			String[] titles = lowerRepoName.split("[\\s\\-_]");
-			for(String title_term : titles)
-			{
-				double maxSim = 0d, csim = 0d;
-				for(String query_term : queries)
-				{
-					if(title_term.startsWith(query_term) || title_term.endsWith(query_term))			
-						csim = ((double)query_term.length() / (double)title_term.length());
-					else if(query_term.startsWith(title_term) || query_term.endsWith(title_term))
-						csim = ((double)title_term.length() / (double)query_term.length());
-					if(maxSim < csim)
-						maxSim = csim;
-				}
-				coincidencesim += maxSim / (double)titles.length;
-				System.out.println("coincidencesim: " + coincidencesim);
-			}
+			double coincidencesim = getMutualCoverage(lowerRepoName, query);
 			
-			if(coincidencesim == 0)
-				titlesim = 0;
-			else
-				titlesim = editsim * (coincidencesim + 1.0);
-			if (titlesim > 0)
-				scores.put(resource.getTitle().get(repoName), titlesim);
+			if(coincidencesim != 0)
+			{
+				titlesim = Math.sqrt(editsim) * (coincidencesim + 1.0);
+				scores.put(repoid, titlesim);
+				if(titlesim > max)
+					max = titlesim;
+			}
 		}
 		return scores;
+	}
+	
+	private double getMutualCoverage(String title, String query){
+		double mcsim = 0;
+		String[] titles = title.split("[\\s\\-_]");
+		String[] queries = query.split("[\\s\\-_]");
+		for(String title_term : titles)
+		{
+			double maxSim = 0d, csim = 0d;
+			for(String query_term : queries)
+			{
+				if(title_term.startsWith(query_term) || title_term.endsWith(query_term) || title_term.contains(query_term))			
+					csim = ((double)query_term.length() / (double)title_term.length());
+				else if(query_term.startsWith(title_term) || query_term.endsWith(title_term) || query_term.contains(title_term))
+					csim = ((double)title_term.length() / (double)query_term.length());
+				if(maxSim < csim)
+					maxSim = csim;
+			}
+			mcsim += maxSim / (double)titles.length;
+		}
+		return mcsim;
 	}
 	
 	// 计算特征相似度 (0~1)
@@ -190,6 +209,18 @@ public class RepoRanking {
 	}
 
 	private void effectCompute(){
+		if(effects == null)
+		{
+			effects = new HashMap<Integer, Double>();
+			for(int id : resource.getRepos().keySet())
+			{
+				
+				effects.put(id, (Math.log10(1.0+Math.sqrt(1.0 + KS*resource.getRepos().get(id).getStargazers()+KF*resource.getRepos().get(id).getForks())) + 1.0)*Math.pow(2.0, -getDayDiff(id)/KU));
+			}
+		}
+	}
+	
+	public double getDayDiff(int id){
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String stringDate = "2015-07-31 00:00:00";
 		Date curDate;
@@ -200,36 +231,103 @@ public class RepoRanking {
 			curDate = new Date(115,7,31);
 			e1.printStackTrace();
 		}
-		if(effects == null)
+		Date repoDate;
+		try {
+			repoDate = df.parse(resource.getRepos().get(id).getDate().replace("T", " ").replace("Z", " "));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			repoDate = new Date(115,1,1);
+			e.printStackTrace();
+		}
+		
+		int daydiff = 180;
+		try {
+			daydiff = daysBetween(repoDate, curDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return daydiff;
+	}
+	
+	public double[] getFeatures(String query, int id1, int id2){
+		double[] features = new double[22];
+		query = query.toLowerCase();
+		Map<String, Double> wordVec = queryExpansion.getWeightedQuery(query);
+		effectCompute();
+		
+		Map<Integer, Double> tagVec = zeroOne(computeCharacterSim(wordVec));
+		Map<Integer, Double> textVec = zeroOne(computeTextSim(wordVec));
+		Map<Integer, Double> titleVec = zeroOne(computeTitleSim(query));
+		
+		features[0] = (titleVec.containsKey(id1) ? titleVec.get(id1): 0d);  //id1项目的标题相似度
+		features[1] = (titleVec.containsKey(id2) ? titleVec.get(id2): 0d);  //id2项目的标题相似度
+		
+		features[2] = (textVec.containsKey(id1) ? textVec.get(id1): 0d);  //id1项目的文本相似度
+		features[3] = (textVec.containsKey(id2) ? textVec.get(id2): 0d);  //id2项目的文本相似度
+		
+		features[4] = (tagVec.containsKey(id1) ? tagVec.get(id1): 0d);  //id1项目的标签相似度
+		features[5] = (tagVec.containsKey(id2) ? tagVec.get(id2): 0d);  //id2项目的标签相似度
+		
+		features[6] = KS*resource.getRepos().get(id1).getStargazers();  //id1项目的star
+		features[7] = KS*resource.getRepos().get(id2).getStargazers();  //id2项目的star
+		
+		features[8] = KF*resource.getRepos().get(id1).getForks();  //id1项目的fork
+		features[9] = KF*resource.getRepos().get(id2).getForks();  //id2项目的fork
+		
+		features[10] = Math.pow(2.0, -getDayDiff(id1)/KU);  //id1项目的activity
+		features[11] = Math.pow(2.0, -getDayDiff(id2)/KU);  //id2项目的activity
+		
+		int desLen1 = resource.getRepos().get(id1).getDes().split("[\\s\\-_]").length;
+		int desLen2 = resource.getRepos().get(id2).getDes().split("[\\s\\-_]").length;
+		features[12] = (desLen1 >= desLen2 ? 1d: 0d);  //项目描述文本长度       若r_a的长度大于r_b，则设置为1，反之为0。
+		
+		int nameLen1 = resource.getRepos().get(id1).getReponame().length();
+		int nameLen2 = resource.getRepos().get(id2).getReponame().length();
+		features[13] = (nameLen1 >= nameLen2 ? 1d: 0d);  //项目名称字符串长度	若r_a的长度大于r_b，则设置为1，反之为0。
+		
+		String repoName1 = resource.getRepos().get(id1).getReponame().toLowerCase();
+		String repoName2 = resource.getRepos().get(id2).getReponame().toLowerCase();
+		features[14] = 1.0 / (double)(getLevenshteinDistance(query, repoName1) + 1);  //id1的name与query的最短编辑距离
+		features[15] = 1.0 / (double)(getLevenshteinDistance(query, repoName2) + 1);  //id1的name与query的最短编辑距离
+		features[16] = getMutualCoverage(repoName1, query);  //id1的name与query的包含关系
+		features[17] = getMutualCoverage(repoName2, query);  //id2的name与query的包含关系
+		
+		String[] queries = query.split("[\\s\\-_]");
+//		Set<String> queryTermSet = new HashSet<String>();
+//		for(String term : queries)
+//			queryTermSet.add(term);
+		
+		features[18] = 0d;  //id1项目的文档关键字交集
+		features[19] = 0d;  //id2项目的文档关键字交集
+		features[20] = 0d;  //id1项目的标签关键字交集
+		features[21] = 0d;  //id2项目的标签关键字交集
+		
+		for(String keyword : queries)
 		{
-			effects = new HashMap<Integer, Double>();
-			for(int id : resource.getRepos().keySet())
+			if(resource.getTw().containsKey(keyword))
 			{
-				Date repoDate;
-				try {
-					repoDate = df.parse(resource.getRepos().get(id).getDate().replace("T", " ").replace("Z", " "));
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					repoDate = new Date(115,1,1);
-					e.printStackTrace();
-				}
-				
-				int daydiff = 180;
-				try {
-					daydiff = daysBetween(repoDate, curDate);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				effects.put(id, (Math.log10(1.0+Math.sqrt(1.0 + KS*resource.getRepos().get(id).getStargazers()+KF*resource.getRepos().get(id).getForks())) + 1.0)*Math.pow(2.0, -daydiff/KU));
+				if(resource.getTw().get(keyword).containsKey(id1))
+					features[18] += 1;
+				if(resource.getTw().get(keyword).containsKey(id2))
+					features[19] += 1;
+			}
+			if(resource.getTt().containsKey(keyword))
+			{
+				if(resource.getTt().get(keyword).containsKey(id1))
+					features[20] += 1;
+				if(resource.getTt().get(keyword).containsKey(id2))
+					features[21] += 1;
 			}
 		}
+		
+		return features;
 	}
 	
 	public List<SearchRepo> rankScore(String query, int top) {
 		
 		System.out.print("query:" + query);
-		System.out.print("  size:" + top);
+		System.out.println("  size:" + top);
 		
 		GraphByMatrix graph = getAnalysisGraph(top);
 		
@@ -453,18 +551,11 @@ public class RepoRanking {
        return Integer.parseInt(String.valueOf(between_days));           
     }    
 
-	// public static void main(String[] args) {
-	// Resource r = new Resource();
-	// RepoRanking rr = new RepoRanking(r);
-	// String query = "cassandra";
-	// List<RepoScore> l = rr.rankScore(query, 10);
-	// for(RepoScore ps : l)
-	// {
-	// SearchRepo sr = r.getRepos().get(ps.getId());
-	// System.out.println("=========================");
-	// System.out.println(sr.getId() + "\t" +
-	// sr.getUserName()+"/"+sr.getRepoName() + "\t" + ps.getScore());
-	// System.out.println(sr.getDes() + "\n" + sr.getUrl());
-	// }
-	// }
+    //计算两个
+	 public static void main(String[] args) {
+		 edu.sjtu.core.resource.Resource r = new edu.sjtu.core.resource.Resource();
+		 QueryExpansion q = new QueryExpansion(r); 
+		 RepoRanking repoRanking = new RepoRanking(r,q);
+		 System.out.println(Arrays.toString(repoRanking.getFeatures("java", 398540, 44540)));
+	 }
 }

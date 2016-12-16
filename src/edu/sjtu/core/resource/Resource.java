@@ -27,7 +27,7 @@ public class Resource {
     Taxonomy taxonomy;
     Map<String, Map<Integer,Object>> tt; //标签对项目的权值倒排表
     Map<String, Map<Integer,Object>> tw; //文本对项目的权值倒排表
-    Map<String,Integer> title;  //自标id到title的映射
+    Map<String,Integer> title;  //title到自标id的映射
     Map<Integer, SearchRepo> repos;  //自标id到title的映射
     Map<Integer,Integer> repoids;  //github-id到自标id的映射
 

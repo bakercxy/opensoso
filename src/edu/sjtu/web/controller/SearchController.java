@@ -97,7 +97,7 @@ public class SearchController {
 		Date d = new Date();
 		long l1 = d.getTime();
 		
-		List result = repoRanking.rankScore(query, 10);
+		List result = repoRanking.rankScore(query, 100);
 		
 		d = new Date();
 		long l2 = d.getTime();

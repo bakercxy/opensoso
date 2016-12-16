@@ -15,9 +15,11 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 
-import edu.sjtu.web.config.Path;
+import edu.sjtu.eva.tag.Repo;
+import edu.sjtu.eva.tag.EvaTag;
 import edu.sjtu.web.util.FileUtil;
 import edu.sjtu.web.util.ILineHandler;
+import edu.sjtu.web.util.Path;
 
 @Component("evaresource")
 @Scope("singleton")

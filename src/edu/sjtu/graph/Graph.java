@@ -1,4 +1,4 @@
-package edu.sjtu.test;
+package edu.sjtu.graph;
 
 public class Graph {
 	final static public boolean DIRECTED_GRAPH = true;

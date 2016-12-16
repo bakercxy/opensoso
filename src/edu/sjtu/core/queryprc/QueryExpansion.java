@@ -26,6 +26,16 @@ public class QueryExpansion {
 	public void setResource(edu.sjtu.core.resource.Resource resource) {
 		this.resource = resource;
 	}
+    
+
+	public QueryExpansion(edu.sjtu.core.resource.Resource resource) {
+		super();
+		this.resource = resource;
+	}
+	
+	public QueryExpansion() {
+		super();
+	}
 
 	public Map<String,Double> getWeightedQuery(String sentence){
 

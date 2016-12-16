@@ -115,7 +115,15 @@
 														 </h4>
 													</div>
 												</div>
-													
+													<p><b>Repository ID:</b><c:choose>
+														<c:when test="${obj.id == ''}">
+             												-
+       													</c:when>
+														<c:otherwise>
+       														${obj.id}
+       													</c:otherwise>
+													</c:choose>
+													</p>
 													 <p><b>Description:</b><c:choose>
 														<c:when test="${obj.des == ''}">
              												-

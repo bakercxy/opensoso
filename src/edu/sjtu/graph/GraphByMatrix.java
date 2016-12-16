@@ -1,4 +1,4 @@
-package edu.sjtu.test;
+package edu.sjtu.graph;
 
 import java.util.LinkedList;
 import java.util.Queue;
