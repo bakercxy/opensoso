@@ -7,8 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+
 import Lab1.FileUtil;
-import edu.sjtu.web.config.Path;
+import edu.sjtu.web.util.Path;
 
 /**
  * Created by BakerCxy on 2015/11/17.

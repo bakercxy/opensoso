@@ -15,7 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import edu.sjtu.core.taxonomy.Taxonomy;
 import edu.sjtu.web.bean.SearchRepo;
-import edu.sjtu.web.config.Path;
+import edu.sjtu.web.util.Path;
 
 /**
  * Created by BakerCxy on 2015/11/12.

@@ -64,18 +64,24 @@ public class RepoRanking {
 			double titlesim = 0.0;
 			//最小编辑距离
 			double editsim = 1.0 / (double)(getLevenshteinDistance(query, lowerRepoName) + 1);
-			
 			//从属关系
 			double coincidencesim = 0;
 			String[] titles = lowerRepoName.split("[\\s\\-_]");
 			for(String title_term : titles)
+			{
+				double maxSim = 0d, csim = 0d;
 				for(String query_term : queries)
-//					if(title_term.equals(query_term))
-//						coincidencesim += 1.0 / (double)titles.length;
+				{
 					if(title_term.startsWith(query_term) || title_term.endsWith(query_term))			
-						coincidencesim += ((double)query_term.length() / (double)title_term.length()) / (titles.length + 1.0);
+						csim = ((double)query_term.length() / (double)title_term.length());
 					else if(query_term.startsWith(title_term) || query_term.endsWith(title_term))
-						coincidencesim += ((double)title_term.length() / (double)query_term.length()) / (titles.length + 1.0);		
+						csim = ((double)title_term.length() / (double)query_term.length());
+					if(maxSim < csim)
+						maxSim = csim;
+				}
+				coincidencesim += maxSim / (double)titles.length;
+				System.out.println("coincidencesim: " + coincidencesim);
+			}
 			
 			if(coincidencesim == 0)
 				titlesim = 0;

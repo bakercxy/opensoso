@@ -4,7 +4,7 @@ import java.io.File;
 
 import Lab1.FileUtil;
 import Lab1.ILineHandler;
-import edu.sjtu.web.config.Path;
+import edu.sjtu.web.util.Path;
 
 public class TagCount {
 	public static void main(String[] args) {
