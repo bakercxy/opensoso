@@ -54,7 +54,7 @@ public class SearchController {
 
 
 	@RequestMapping(value="reposearch.do")
-	public String repoSearch(String query,ModelMap map){
+	public String repoSearch(String query, boolean rank, ModelMap map){
 		try {
 			query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -62,15 +62,12 @@ public class SearchController {
 			e.printStackTrace();
 		}
 		query = query.trim();
-//		String[] ss = query.split(" ");
-//		query = query.substring(0, query.length()-ss[ss.length-1].length()).trim();
 		map.put("query", query);
 		
 		Date d = new Date();
 		long l1 = d.getTime();
 		
-//		List result = repoRanking.rankScore(query, Integer.parseInt(ss[ss.length-1]));
-		List result = repoRanking.rankScore(query, 100, true);
+		List<SearchRepo> result = repoRanking.rankScore(query, 100, rank);
 		
 		d = new Date();
 		long l2 = d.getTime();

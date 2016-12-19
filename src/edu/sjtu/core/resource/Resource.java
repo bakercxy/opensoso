@@ -1,6 +1,11 @@
 package edu.sjtu.core.resource;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -30,6 +35,8 @@ public class Resource {
     Map<String,Integer> title;  //title到自标id的映射
     Map<Integer, SearchRepo> repos;  //自标id到title的映射
     Map<Integer,Integer> repoids;  //github-id到自标id的映射
+    Map<Integer, Double> effects; //repoid到影响力
+    public static double KS = 0.2, KF = 0.15, KU = 1000;
 
     public Map<String, Map<Integer, Object>> getTt() {
         return tt;
@@ -132,10 +139,81 @@ public class Resource {
 				repoids.put(gitid,myid);
 			}
 		});
+        
+        effectCompute();
     }
 
 	public Map<Integer, Integer> getRepoids() {
 		return repoids;
+	}
+	
+	private void effectCompute() {
+		if (effects == null) {
+			System.out.println("computing repository effects ...");
+			effects = new HashMap<Integer, Double>();
+			for (int id : repos.keySet()) {
+
+				effects.put(id,
+						(Math.log10(1.0 + Math.sqrt(1.0 + KS
+								* repos.get(id).getStargazers()
+								+ KF * repos.get(id).getForks())) + 1.0)
+								* Math.pow(2.0, -getDayDiff(id) / KU));
+			}
+		}
+	}
+	
+	public Map<Integer, Double> getEffects() {
+		return effects;
+	}
+
+	public void setEffects(Map<Integer, Double> effects) {
+		this.effects = effects;
+	}
+
+	private int daysBetween(Date smdate, Date bdate)
+			throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		smdate = sdf.parse(sdf.format(smdate));
+		bdate = sdf.parse(sdf.format(bdate));
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(smdate);
+		long time1 = cal.getTimeInMillis();
+		cal.setTime(bdate);
+		long time2 = cal.getTimeInMillis();
+		long between_days = (time2 - time1) / (1000 * 3600 * 24);
+
+		return Integer.parseInt(String.valueOf(between_days));
+	}
+
+	public double getDayDiff(int id) {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String stringDate = "2015-07-31 00:00:00";
+		Date curDate;
+		try {
+			curDate = df.parse(stringDate);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			curDate = new Date(115, 7, 31);
+			e1.printStackTrace();
+		}
+		Date repoDate;
+		try {
+			repoDate = df.parse(getRepos().get(id).getDate()
+					.replace("T", " ").replace("Z", " "));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			repoDate = new Date(115, 1, 1);
+			e.printStackTrace();
+		}
+
+		int daydiff = 180;
+		try {
+			daydiff = daysBetween(repoDate, curDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return daydiff;
 	}
 
 }

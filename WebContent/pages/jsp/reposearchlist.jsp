@@ -70,11 +70,16 @@
 									class="form-control input-lg" type="text"
 									placeholder="Please enter your interest">
 							</div>
-							<div class="col-lg-4">
+							<div class="col-lg-3">
 								<button type="button" class="btn btn-info btn-lg"
 									onclick="return searchQuery()">SOSO!</button>
+								<!-- 
 								<button type="button" class="btn btn-info btn-lg"
 									onclick="return rateQuery()">Rate!</button>
+									-->
+							</div>
+							<div class="col-lg-3">
+								<input id="rankbox" name="rank" type="checkbox"/> Use ranking model
 							</div>
 						</form>
 					</div>
@@ -101,7 +106,7 @@
 											<div class="row">
 												<div class="row">
 													<div class="col-md-9">
-														<p><a href="${obj.url}"><h3>${obj.username} / ${obj.markedreponame}</h3></a></p>
+														<p><h3>${vs.index+1}</h3><a href="${obj.url}"><h3>${obj.username} / ${obj.markedreponame}</h3></a></p>
 													</div>
 													<div class="col-md-3">
 														<h4><a class="repo-list-stat-item tooltipped tooltipped-s" href="https://github.com/${obj.username}/${obj.reponame}/stargazers" aria-label="Stargazers">

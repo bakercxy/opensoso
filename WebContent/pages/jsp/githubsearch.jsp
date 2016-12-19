@@ -72,18 +72,20 @@
 
 									<div class="row row-lg-offset-3">
 									<div class="col-lg-6 col-lg-offset-3">
-										<div class="col-lg-3 col-lg-offset-1">
+										<div class="col-lg-4 col-lg-offset-4">
 											<button type="button" class="btn btn-inverse btn-lg"
 												onclick="return searchQuery()"
 												style="width: 160px; font-size: 22px">&nbsp&nbsp
 												Search &nbsp&nbsp</button>
 										</div>
+										<!-- 
 										<div class="col-lg-3 col-lg-offset-2">
 											<button type="button" class="btn btn-inverse btn-lg"
 												onclick="return rateQuery()"
 												style="width: 160px; font-size: 22px">&nbsp&nbsp
 												Rate it! &nbsp&nbsp</button>
 										</div>
+										-->
 										</div>
 									</div>
 								</div>

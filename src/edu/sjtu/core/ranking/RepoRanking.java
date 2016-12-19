@@ -1,19 +1,13 @@
 package edu.sjtu.core.ranking;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -34,9 +28,7 @@ public class RepoRanking {
 	edu.sjtu.core.resource.Resource resource;
 	QueryExpansion queryExpansion;
 	RankingModel rankingModel;
-	Map<Integer, Double> effects;
-	static double KS = 0.2, KF = 0.15, KU = 1000;
-
+	
 	public RepoRanking(edu.sjtu.core.resource.Resource resource,
 			QueryExpansion queryExpansion) {
 		super();
@@ -96,6 +88,7 @@ public class RepoRanking {
 					max = titlesim;
 			}
 		}
+		
 		return scores;
 	}
 
@@ -206,14 +199,12 @@ public class RepoRanking {
 
 					// scores.put(id, currentscore + (wordVec.get(key) * w *
 					// (Math.log(key.split("\\s").length) * starscore + 1)));
-					scores.put(
-							id,
-							currentscore
-									+ (wordVec.get(key) * repotagweight * (Math
-											.log(key.split("\\s").length))));
+					scores.put(id, currentscore + (wordVec.get(key) * repotagweight * Math.log(key.split("\\s").length + 1)));
+					
 				}
 			}
 		}
+		
 		return scores;
 	}
 
@@ -272,7 +263,7 @@ public class RepoRanking {
 			// 1));
 		}
 		//
-
+		
 		return scores;
 	}
 
@@ -280,7 +271,6 @@ public class RepoRanking {
 		double[] features = new double[12];
 		query = query.toLowerCase();
 		Map<String, Double> wordVec = queryExpansion.getWeightedQuery(query);
-		effectCompute();
 
 		Map<Integer, Double> tagVec = zeroOne(computeCharacterSim(wordVec));
 		Map<Integer, Double> textVec = zeroOne(computeTextSim(wordVec));
@@ -299,29 +289,29 @@ public class RepoRanking {
 		features[1] = features[2] - features[3];
 		features[2] = features[4] - features[5];
 
-		if (KS * resource.getRepos().get(id1).getStargazers() - KS
+		if (edu.sjtu.core.resource.Resource.KS * resource.getRepos().get(id1).getStargazers() - edu.sjtu.core.resource.Resource.KS
 				* resource.getRepos().get(id2).getStargazers() > 0)
 			features[3] = 1d;
-		else if (KS * resource.getRepos().get(id1).getStargazers() - KS
+		else if (edu.sjtu.core.resource.Resource.KS * resource.getRepos().get(id1).getStargazers() - edu.sjtu.core.resource.Resource.KS
 				* resource.getRepos().get(id2).getStargazers() < 0)
 			features[3] = -1d;
 		else
 			features[3] = 0d;
 
-		if (KS * resource.getRepos().get(id1).getForks() - KS
+		if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
 				* resource.getRepos().get(id2).getForks() > 0)
 			features[4] = 1d;
-		else if (KS * resource.getRepos().get(id1).getForks() - KS
+		else if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
 				* resource.getRepos().get(id2).getForks() < 0)
 			features[4] = -1d;
 		else
 			features[4] = 0d;
 
-		if (Math.pow(2.0, -getDayDiff(id1) / KU)
-				- Math.pow(2.0, -getDayDiff(id2) / KU) > 0)
+		if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
+				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) > 0)
 			features[5] = 1d;
-		else if (Math.pow(2.0, -getDayDiff(id1) / KU)
-				- Math.pow(2.0, -getDayDiff(id2) / KU) < 0)
+		else if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
+				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) < 0)
 			features[5] = -1d;
 		else
 			features[5] = 0d;
@@ -398,32 +388,33 @@ public class RepoRanking {
 		features[1] = features[2] - features[3];
 		features[2] = features[4] - features[5];
 
-		if (KS * resource.getRepos().get(id1).getStargazers() - KS
+		if (edu.sjtu.core.resource.Resource.KS * resource.getRepos().get(id1).getStargazers() - edu.sjtu.core.resource.Resource.KS
 				* resource.getRepos().get(id2).getStargazers() > 0)
 			features[3] = 1d;
-		else if (KS * resource.getRepos().get(id1).getStargazers() - KS
+		else if (edu.sjtu.core.resource.Resource.KS * resource.getRepos().get(id1).getStargazers() - edu.sjtu.core.resource.Resource.KS
 				* resource.getRepos().get(id2).getStargazers() < 0)
 			features[3] = -1d;
 		else
 			features[3] = 0d;
 
-		if (KS * resource.getRepos().get(id1).getForks() - KS
+		if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
 				* resource.getRepos().get(id2).getForks() > 0)
 			features[4] = 1d;
-		else if (KS * resource.getRepos().get(id1).getForks() - KS
+		else if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
 				* resource.getRepos().get(id2).getForks() < 0)
 			features[4] = -1d;
 		else
 			features[4] = 0d;
 
-		if (Math.pow(2.0, -getDayDiff(id1) / KU)
-				- Math.pow(2.0, -getDayDiff(id2) / KU) > 0)
+		if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
+				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) > 0)
 			features[5] = 1d;
-		else if (Math.pow(2.0, -getDayDiff(id1) / KU)
-				- Math.pow(2.0, -getDayDiff(id2) / KU) < 0)
+		else if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
+				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) < 0)
 			features[5] = -1d;
 		else
 			features[5] = 0d;
+		
 		int desLen1 = 0, desLen2 = 0;
 		if (resource.getRepos().get(id1).getDes() != null)
 			desLen1 = resource.getRepos().get(id1).getDes().split("[\\s\\-_]").length;
@@ -477,31 +468,14 @@ public class RepoRanking {
 		return features;
 	}
 
-	private void effectCompute() {
-		if (effects == null) {
-			effects = new HashMap<Integer, Double>();
-			for (int id : resource.getRepos().keySet()) {
-
-				effects.put(
-						id,
-						(Math.log10(1.0 + Math.sqrt(1.0 + KS
-								* resource.getRepos().get(id).getStargazers()
-								+ KF * resource.getRepos().get(id).getForks())) + 1.0)
-								* Math.pow(2.0, -getDayDiff(id) / KU));
-			}
-		}
-	}
-
 	public List<SearchRepo> rankScore(String query, int top,
 			boolean useLearningRankModel) {
 
-		System.out.print("query:" + query);
-		System.out.println("  size:" + top);
+		System.out.print("query:\"" + query + "\"  size:" + top + "  rankmodel:" + useLearningRankModel + "  ");
 
 		Date begin = new Date();
 		query = query.toLowerCase();
 		Map<String, Double> wordVec = queryExpansion.getWeightedQuery(query);
-		effectCompute();
 
 		Map<Integer, Double> tagVec = zeroOne(computeCharacterSim(wordVec));
 		Map<Integer, Double> textVec = zeroOne(computeTextSim(wordVec));
@@ -511,22 +485,25 @@ public class RepoRanking {
 		for (int i = 0; i < Size.Raw_Repo; i++) {
 			int id = i + 1;
 			if (resource.getRepos().containsKey(id)) {
-				if (!tagVec.containsKey(id) && !textVec.containsKey(id)
-						&& !titleVec.containsKey(id))
+				if (!tagVec.containsKey(id) && !textVec.containsKey(id) && !titleVec.containsKey(id))
 					repoRelavences[i] = new RepoScore(id, 0.0);
 				else {
-					repoRelavences[i] = new RepoScore(
-							id,
-							((1.0 + (tagVec.containsKey(id) ? tagVec.get(id)
-									: 0.0))
-									* (1.0 + (textVec.containsKey(id) ? textVec
-											.get(id) : 0.0)) * (1.0 + (titleVec
+					repoRelavences[i] = new RepoScore(id,
+							((1.0 + (tagVec.containsKey(id) ? tagVec.get(id) : 0.0)) * (1.0 + (textVec.containsKey(id) ? textVec.get(id) : 0.0)) * (1.0 + (titleVec
 									.containsKey(id) ? titleVec.get(id) : 0.0))));
+					
+//					if(Double.isNaN(repoRelavences[i].getScore()))
+//					{
+//						System.out.println("rank:" + id+ " not a number!");
+//						System.out.println(1.0 + (tagVec.containsKey(id) ? tagVec.get(id) : 0.0));
+//						System.out.println(1.0 + (textVec.containsKey(id) ? textVec.get(id) : 0.0));
+//						System.out.println(1.0 + (titleVec.containsKey(id) ? titleVec.get(id) : 0.0));
+//					}
 				}
 			} else
 				repoRelavences[i] = new RepoScore(id, 0.0);
-
 		}
+		
 		// 基于相关度值对所有资源排序
 		Arrays.sort(repoRelavences, new RepoScore());
 
@@ -537,9 +514,9 @@ public class RepoRanking {
 			repoScoresWithEffect[i] = new RepoScore(repoRelavences[i].getId(),
 					repoRelavences[i].getScore());
 			int repoId = repoRelavences[i].getId();
-			if (effects.containsKey(repoId))
+			if (resource.getEffects().containsKey(repoId))
 				repoScoresWithEffect[i].setScore(repoRelavences[i].getScore()
-						* effects.get(repoId));
+						* resource.getEffects().get(repoId));
 		}
 		// 基于相关度和影响力综合打分对top*2的资源排序
 		Arrays.sort(repoScoresWithEffect, new RepoScore());
@@ -561,10 +538,10 @@ public class RepoRanking {
 					double rankValue = graph.Dijkstra(""
 							+ repoScoresWithEffect[i].getId());
 					repoScoresWithEffect[i].setRank(rankValue);
-					System.out.println("No." + i + "  id: "
-							+ repoScoresWithEffect[i].getId() + "  rankvalue: "
-							+ repoScoresWithEffect[i].getRank() + "  score: "
-							+ repoScoresWithEffect[i].getScore());
+//					System.out.println("No." + i + "  id: "
+//							+ repoScoresWithEffect[i].getId() + "  rankvalue: "
+//							+ repoScoresWithEffect[i].getRank() + "  score: "
+//							+ repoScoresWithEffect[i].getScore());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -573,11 +550,11 @@ public class RepoRanking {
 			Arrays.sort(repoScoresWithEffect, new RepoScore());
 		}
 
-		for (int i = 0; i < top; i++)
-			System.out.println("No." + i + "  id: "
-					+ repoScoresWithEffect[i].getId() + "  rankvalue: "
-					+ repoScoresWithEffect[i].getRank() + "  score: "
-					+ repoScoresWithEffect[i].getScore());
+//		for (int i = 0; i < top; i++)
+//			System.out.println("No." + i + "  id: "
+//					+ repoScoresWithEffect[i].getId() + "  rankvalue: "
+//					+ repoScoresWithEffect[i].getRank() + "  score: "
+//					+ repoScoresWithEffect[i].getScore());
 
 		// 返回前台
 		List<SearchRepo> result = new ArrayList<SearchRepo>();
@@ -596,8 +573,8 @@ public class RepoRanking {
 		}
 
 		Date end = new Date();
-		System.out.println("  compute time: "
-				+ (end.getTime() - begin.getTime()) / 1000.0);
+		System.out.println("  computation time: "
+				+ (end.getTime() - begin.getTime()) / 1000.0 + "s");
 		return result;
 	}
 
@@ -638,11 +615,13 @@ public class RepoRanking {
 
 	// 01化
 	private Map<Integer, Double> zeroOne(Map<Integer, Double> map) {
-		double largest = 0;
+		double largest = 0d;
 		for (int id : map.keySet()) {
 			if (map.get(id) > largest)
 				largest = map.get(id);
 		}
+		if(largest == 0d)
+			return map;
 		for (int id : map.keySet())
 			map.put(id, map.get(id) / largest);
 		return map;
@@ -658,51 +637,6 @@ public class RepoRanking {
 	 * @return 相差天数
 	 * @throws ParseException
 	 */
-	private static int daysBetween(Date smdate, Date bdate)
-			throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		smdate = sdf.parse(sdf.format(smdate));
-		bdate = sdf.parse(sdf.format(bdate));
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(smdate);
-		long time1 = cal.getTimeInMillis();
-		cal.setTime(bdate);
-		long time2 = cal.getTimeInMillis();
-		long between_days = (time2 - time1) / (1000 * 3600 * 24);
-
-		return Integer.parseInt(String.valueOf(between_days));
-	}
-
-	private double getDayDiff(int id) {
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String stringDate = "2015-07-31 00:00:00";
-		Date curDate;
-		try {
-			curDate = df.parse(stringDate);
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			curDate = new Date(115, 7, 31);
-			e1.printStackTrace();
-		}
-		Date repoDate;
-		try {
-			repoDate = df.parse(resource.getRepos().get(id).getDate()
-					.replace("T", " ").replace("Z", " "));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			repoDate = new Date(115, 1, 1);
-			e.printStackTrace();
-		}
-
-		int daydiff = 180;
-		try {
-			daydiff = daysBetween(repoDate, curDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return daydiff;
-	}
 
 	// 计算两个
 	public static void main(String[] args) {

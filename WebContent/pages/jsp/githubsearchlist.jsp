@@ -73,8 +73,10 @@
 							<div class="col-lg-4">
 								<button type="button" class="btn btn-inverse btn-lg"
 									onclick="return searchQuery()">Search</button>
+									<!-- 
 								<button type="button" class="btn btn-inverse btn-lg"
 									onclick="return rateQuery()">Rate</button>
+									-->
 							</div>
 						</form>
 					</div>

@@ -67,22 +67,27 @@
 												class="form-control input-lg" type="text"
 												placeholder="Please enter your interest">
 										</div>
+										<div class="col-lg-3">
+											<input id="rankbox" name="rank" type="checkbox" /> Use ranking model
+										</div>
 									</div>
 
 									<div class="row row-lg-offset-3">
 										<div class="col-lg-6 col-lg-offset-3">
-										<div class="col-lg-3 col-lg-offset-1">
+										<div class="col-lg-4 col-lg-offset-4">
 											<button type="button" class="btn btn-info btn-lg"
 												onclick="return searchQuery()"
 												style="width: 160px; font-size: 22px">&nbsp&nbsp
 												SOSO! &nbsp&nbsp</button>
 										</div>
+										<!-- 
 										<div class="col-lg-3 col-lg-offset-2">
 											<button type="button" class="btn btn-info btn-lg"
 												onclick="return rateQuery()"
 												style="width: 160px; font-size: 22px">&nbsp&nbsp
 												Rate it! &nbsp&nbsp</button>
 										</div>
+										 -->
 										</div>
 									</div>
 								</div>
