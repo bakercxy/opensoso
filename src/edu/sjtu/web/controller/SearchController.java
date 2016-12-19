@@ -1,8 +1,12 @@
 package edu.sjtu.web.controller;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Resource;
 
@@ -12,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import edu.sjtu.core.ranking.RepoFetch;
 import edu.sjtu.core.ranking.RepoRanking;
+import edu.sjtu.web.bean.SearchRepo;
+import edu.sjtu.web.util.Path;
 
 @Controller
 public class SearchController {
@@ -64,7 +70,7 @@ public class SearchController {
 		long l1 = d.getTime();
 		
 //		List result = repoRanking.rankScore(query, Integer.parseInt(ss[ss.length-1]));
-		List result = repoRanking.rankScore(query, 100);
+		List result = repoRanking.rankScore(query, 100, true);
 		
 		d = new Date();
 		long l2 = d.getTime();
@@ -97,7 +103,7 @@ public class SearchController {
 		Date d = new Date();
 		long l1 = d.getTime();
 		
-		List result = repoRanking.rankScore(query, 100);
+		List result = repoRanking.rankScore(query, 100,true);
 		
 		d = new Date();
 		long l2 = d.getTime();
@@ -179,5 +185,65 @@ public class SearchController {
 			map.put("rank",true);
 			return "githubsearchlist";
 		}
+	}
+	
+	@RequestMapping(value="repocompare.do")
+	public String repoCompare(String query,ModelMap map){
+		try {
+			query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		query = query.trim();
+		map.put("query", query);
+		
+		Date d = new Date();
+		
+		List<SearchRepo> result = repoRanking.rankScore(query, 30, false);
+		
+		Random r = new Random();
+		int id1 = r.nextInt(30);
+		int id2 = -1;
+		
+		while(id2 == -1)
+		{
+			int step = r.nextInt(10) - 5;
+			if(id1 + step < 30 && id1 + step >= 0 && step != 0)
+				id2 = id1 + step;
+		}
+		
+		System.out.println("id1:" + id1);
+		System.out.println("id2:" + id2);
+		List<SearchRepo> comparePair = new ArrayList<SearchRepo>();
+		comparePair.add(result.get(id1));
+		comparePair.add(result.get(id2));
+		map.put("id1", result.get(id1).getId());
+		map.put("id2", result.get(id2).getId());
+		map.put("result", comparePair);
+		return "repocomparelist";
+	}
+	
+	@RequestMapping(value="pairsubmit.do")
+	public String PairCompare(String query,int id1,int id2, int result, ModelMap map){
+		try {
+			query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		FileWriter fw;
+		try {
+			fw = new FileWriter(Path.logPath + "labelpair.dat",true);
+			fw.write(query + "," + id1 + "," + id2 + "," + (id1 == result?1:0) + "\n");  
+			fw.write(query + "," + id2 + "," + id1 + "," + (id1 == result?0:1) + "\n");  
+		    fw.close();  		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return repoCompare(query,map);
 	}
 }

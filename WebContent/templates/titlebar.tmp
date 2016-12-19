@@ -18,8 +18,10 @@
 								class="subtitle">Repository Search</a></li>
 							<li role="presentation"><a href="githubsearch.html"
 								class="subtitle">Github Search</a></li>
-								<li role="presentation"><a href="taganalysis.html"
+							<li role="presentation"><a href="taganalysis.html"
 								class="subtitle">Tag Analysis</a></li>
+							<li role="presentation"><a href="paircomp.html"
+								class="subtitle">SearchPair Label</a></li>
 						</ul>
 					</div>
 				</div>

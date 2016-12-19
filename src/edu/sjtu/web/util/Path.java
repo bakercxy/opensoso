@@ -8,8 +8,7 @@ public class Path {
 //	public final static String resPath = "L:\\res\\";
 	
 	//笔记本配置
-	public final static String logPath = "G:\\greta-data\\log\\";
-	public final static String dirPath = "G:\\greta-data\\dir\\";
+	public final static String logPath = "G:\\res\\log\\";
 	public final static String resPath = "G:\\res\\";
 	public final static String bigResPath = "G:\\res\\";
 

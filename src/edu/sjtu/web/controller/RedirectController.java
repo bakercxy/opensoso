@@ -57,6 +57,12 @@ public class RedirectController {
 		return "ratefeedback";  //跳转到index.jsp;
 	}
 	
+	@RequestMapping(value="paircomp.html")
+	public String redirectToPairComp(HttpServletRequest req,ModelMap map) throws Exception {
+//		System.out.println("我要跳转到hotdescription.jsp");
+		return "repocomparelist";  //跳转到index.jsp;
+	}
+	
 	
 //	@Override  //不带参数访问时的默认方法
 //	public ModelAndView handleRequest(HttpServletRequest req, HttpServletResponse resp) throws Exception {

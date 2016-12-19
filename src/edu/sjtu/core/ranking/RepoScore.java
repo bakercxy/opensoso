@@ -9,8 +9,23 @@ public class RepoScore implements Comparator {
 
 	int id;
     double score;
+    double rank = -1;
 
-    public RepoScore(int id, double score) {
+	@Override
+	public String toString() {
+		return "RepoScore [id=" + id + ", score=" + score + ", rank=" + rank
+				+ "]";
+	}
+
+	public double getRank() {
+		return rank;
+	}
+
+	public void setRank(double rank) {
+		this.rank = rank;
+	}
+
+	public RepoScore(int id, double score) {
         this.id = id;
         this.score = score;
     }
@@ -39,7 +54,18 @@ public class RepoScore implements Comparator {
         // TODO Auto-generated method stub
         RepoScore t1 = (RepoScore) o1;
         RepoScore t2 = (RepoScore) o2;
-        if (t1.score != t2.score)
+        if(t1.getRank() >= 0 && t2.getRank() >= 0)
+        {
+        	if(t1.rank > t2.rank)
+        		return -1;
+        	else if(t1.rank < t2.rank)
+        		return 1;
+        	else  if (t1.score != t2.score)
+                return t1.score < t2.score ? 1 : -1;
+            else
+                return 0;
+        }
+        else if (t1.score != t2.score)
             return t1.score < t2.score ? 1 : -1;
         else
             return 0;

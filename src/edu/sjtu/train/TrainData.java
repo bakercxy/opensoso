@@ -17,12 +17,29 @@ import edu.sjtu.web.util.Path;
  * 输出：用于weka训练的arff文件，包含计算得到的N维向量
  */
 public class TrainData {
-	public static void main(String[] args) {
+	
+	public void getJishuRow(){
+		final List<String> result = new ArrayList<String>();
+		FileUtil.readFile(new File(Path.resPath + "rank-model\\traindata-15.arff"), new ILineHandler() {
+			@Override
+			public void process(String line, int index) throws Exception {
+				System.out.println("computing " + index + " ...");
+				if(index % 2 == 1)
+					result.add(line);
+			}
+		});
+		
+		FileUtil.writeFile(new File(Path.resPath + "rank-model\\labelpair-jishu.dat"), result);
+		System.out.println("done.");
+	}
+	
+	public void convertFile(File f){
 		Resource r = new Resource();
 		QueryExpansion q = new QueryExpansion(r); 
 		final RepoRanking repoRanking = new RepoRanking(r,q);
 		
 		final List<String> result = new ArrayList<String>();
+		result.add("@relation ‘manual-labelpair-data’");
 		result.add("@ATTRIBUTE repo1_titlesim  NUMERIC");
 		result.add("@ATTRIBUTE repo2_titlesim  NUMERIC");
 		result.add("@ATTRIBUTE repo1_textsim  NUMERIC");
@@ -53,22 +70,32 @@ public class TrainData {
 		result.add("");
 		result.add("@DATA");
 
-		FileUtil.readFile(new File(Path.resPath + "rank-model\\labelpair.dat"), new ILineHandler() {
+		FileUtil.readFile(f, new ILineHandler() {
 			
 			@Override
 			public void process(String line, int index) throws Exception {
+				System.out.println("computing " + index + " ...");
 				// TODO Auto-generated method stub
 				String[] datas = line.split(",");
 				String query = datas[0].trim();
 				int id1 = Integer.parseInt(datas[1].trim());
 				int id2 = Integer.parseInt(datas[2].trim());
 				double[] features = repoRanking.getFeatures(query, id1, id2);
-				result.add(Arrays.toString(features).replaceAll("\\[|\\]", "") + "," + Integer.parseInt(datas[3].trim()));
+				String s = Arrays.toString(features).replaceAll("\\[|\\]", "") + "," + Integer.parseInt(datas[3].trim());
+				System.out.println(s);
+				result.add(s);
 			}
 		});
 		
-		FileUtil.writeFile(new File(Path.resPath + "rank-model\\traindata.arff"), result);
+		FileUtil.writeFile(new File(Path.resPath + "rank-model\\traindata-12.arff"), result);
 		System.out.println("done.");
+	}
+	
+	
+	public static void main(String[] args) {
+		TrainData td = new TrainData();
+//		td.getJishuRow();
+		td.convertFile(new File(Path.resPath + "rank-model\\labelpair.dat"));
 		
 	}
 }
