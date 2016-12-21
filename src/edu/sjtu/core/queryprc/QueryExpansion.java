@@ -52,7 +52,7 @@ public class QueryExpansion {
                 if (!weightedTermMap.containsKey(word))
                 	weightedTermMap.put(word, 0.0);
                 
-                double cwt = weightedTermMap.get(word); //获取当前分值
+                double cwt = relatedWords.get(word); //获取相关分值
                 cwt += weightedTermMap.get(word) + cwt - weightedTermMap.get(word) * cwt ;  //将分值与现有分值整合
                 weightedTermMap.put(word, cwt);
             }

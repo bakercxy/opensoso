@@ -70,22 +70,18 @@ public class RepoRanking {
 	// 计算title相似度 (0~1)
 	public Map<Integer, Double> computeTitleSim(String query) {
 		Map<Integer, Double> scores = new HashMap<Integer, Double>();
-		double max = 0d;
 		for (int repoid : resource.getRepos().keySet()) {
 			String lowerRepoName = resource.getRepos().get(repoid)
 					.getReponame().toLowerCase();
 			double titlesim = 0.0;
 			// 最小编辑距离
-			double editsim = 1.0 / (double) (getLevenshteinDistance(query,
-					lowerRepoName) + 1);
+			double editsim = 1.0 / (double) (Math.log(getLevenshteinDistance(query,
+					lowerRepoName) + 1d) + 1d);
 			// 从属关系
 			double coincidencesim = getMutualCoverage(lowerRepoName, query);
-
 			if (coincidencesim != 0) {
-				titlesim = Math.sqrt(editsim) * (coincidencesim + 1.0);
+				titlesim = Math.sqrt(editsim) * (coincidencesim);
 				scores.put(repoid, titlesim);
-				if (titlesim > max)
-					max = titlesim;
 			}
 		}
 		
@@ -220,6 +216,7 @@ public class RepoRanking {
 			if (tw.containsKey(key)) {
 				// System.out.print(key + ", ");
 				for (int id : tw.get(key).keySet()) {
+					
 					// System.out.println(id);
 					if (!scores.containsKey(id)) {
 						scores.put(id, 0.0);
@@ -233,13 +230,10 @@ public class RepoRanking {
 						BigDecimal bd = (BigDecimal) tw.get(key).get(id);
 						repowordweight = bd.doubleValue();
 					} catch (Exception e) {
-						Integer bd = (Integer) tw.get(key).get(id);
-						repowordweight = bd.doubleValue();
+						System.out.println("error");
+//						Integer bd = (Integer) tw.get(key).get(id);
+//						repowordweight = bd.doubleValue();
 					}
-
-					// double starscore = 1;
-					// if(effects.containsKey(id))
-					// starscore = effects.get(id);
 
 					scores.put(id, currentscore + wordVec.get(key)
 							* repowordweight);
@@ -256,19 +250,12 @@ public class RepoRanking {
 			}
 		}
 
-		for (int id : scores.keySet()) {
-			// scores.put(id, scores.get(id) * hitcount.get(id));
-			scores.put(id, scores.get(id) * (Math.sqrt(hitcount.get(id))));
-			// scores.put(id, scores.get(id) * (Math.log(hitcount.get(id)) +
-			// 1));
-		}
-		//
-		
+		for (int id : scores.keySet()) 
+			scores.put(id, scores.get(id) * (hitcount.get(id)));
 		return scores;
 	}
 
 	public double[] getFeatures(String query, int id1, int id2) {
-		double[] features = new double[12];
 		query = query.toLowerCase();
 		Map<String, Double> wordVec = queryExpansion.getWeightedQuery(query);
 
@@ -276,66 +263,71 @@ public class RepoRanking {
 		Map<Integer, Double> textVec = zeroOne(computeTextSim(wordVec));
 		Map<Integer, Double> titleVec = zeroOne(computeTitleSim(query));
 
-		features[0] = (titleVec.containsKey(id1) ? titleVec.get(id1) : 0d); // id1项目的标题相似度
-		features[1] = (titleVec.containsKey(id2) ? titleVec.get(id2) : 0d); // id2项目的标题相似度
+		double[] features = new double[14];
+		query = query.toLowerCase();
 
-		features[2] = (textVec.containsKey(id1) ? textVec.get(id1) : 0d); // id1项目的文本相似度
-		features[3] = (textVec.containsKey(id2) ? textVec.get(id2) : 0d); // id2项目的文本相似度
-
-		features[4] = (tagVec.containsKey(id1) ? tagVec.get(id1) : 0d); // id1项目的标签相似度
-		features[5] = (tagVec.containsKey(id2) ? tagVec.get(id2) : 0d); // id2项目的标签相似度
-
-		features[0] = features[0] - features[1];
-		features[1] = features[2] - features[3];
-		features[2] = features[4] - features[5];
+		double title1 = (titleVec.containsKey(id1) ? titleVec.get(id1) : 0d);
+		double title2 = (titleVec.containsKey(id2) ? titleVec.get(id2) : 0d);
+		
+		double text1 = (textVec.containsKey(id1) ? textVec.get(id1) : 0d);
+		double text2 = (textVec.containsKey(id2) ? textVec.get(id2) : 0d);
+		
+		double tag1 = (tagVec.containsKey(id1) ? tagVec.get(id1) : 0d);
+		double tag2 = (tagVec.containsKey(id2) ? tagVec.get(id2) : 0d);
+		
+		features[0] = title1 - title2;
+		features[1] = text1 - text2;
+		features[2] = tag1 - tag2;
+		features[3] = (text1 + tag1 - text1 * tag1) - (text2 + tag2 - text2 * tag2);
+		features[4] = Math.max(text1 + tag1 - text1 * tag1, title1) - Math.max(text2 + tag2 - text2 * tag2, title2);
 
 		if (edu.sjtu.core.resource.Resource.KS * resource.getRepos().get(id1).getStargazers() - edu.sjtu.core.resource.Resource.KS
 				* resource.getRepos().get(id2).getStargazers() > 0)
-			features[3] = 1d;
+			features[5] = 1d;
 		else if (edu.sjtu.core.resource.Resource.KS * resource.getRepos().get(id1).getStargazers() - edu.sjtu.core.resource.Resource.KS
 				* resource.getRepos().get(id2).getStargazers() < 0)
-			features[3] = -1d;
-		else
-			features[3] = 0d;
-
-		if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
-				* resource.getRepos().get(id2).getForks() > 0)
-			features[4] = 1d;
-		else if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
-				* resource.getRepos().get(id2).getForks() < 0)
-			features[4] = -1d;
-		else
-			features[4] = 0d;
-
-		if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
-				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) > 0)
-			features[5] = 1d;
-		else if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
-				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) < 0)
 			features[5] = -1d;
 		else
 			features[5] = 0d;
 
+		if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
+				* resource.getRepos().get(id2).getForks() > 0)
+			features[6] = 1d;
+		else if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
+				* resource.getRepos().get(id2).getForks() < 0)
+			features[6] = -1d;
+		else
+			features[6] = 0d;
+
+		if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
+				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) > 0)
+			features[7] = 1d;
+		else if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
+				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) < 0)
+			features[7] = -1d;
+		else
+			features[7] = 0d;
+		
 		int desLen1 = 0, desLen2 = 0;
 		if (resource.getRepos().get(id1).getDes() != null)
 			desLen1 = resource.getRepos().get(id1).getDes().split("[\\s\\-_]").length;
 		if (resource.getRepos().get(id2).getDes() != null)
 			desLen2 = resource.getRepos().get(id2).getDes().split("[\\s\\-_]").length;
 		if (desLen1 > desLen2)
-			features[6] = (desLen1 - desLen2) / (double) desLen1;
+			features[8] = (desLen1 - desLen2) / (double) desLen1;
 		else if (desLen1 < desLen2)
-			features[6] = -(desLen2 - desLen1) / (double) desLen2;
+			features[8] = -(desLen2 - desLen1) / (double) desLen2;
 		else
-			features[6] = 0d;
+			features[8] = 0d;
 
 		int nameLen1 = resource.getRepos().get(id1).getReponame().length();
 		int nameLen2 = resource.getRepos().get(id2).getReponame().length();
 		if (nameLen1 > nameLen2) // 项目名称字符串长度 若r_a的长度大于r_b，则设置为1，反之为0。
-			features[7] = (nameLen1 - nameLen2) / (double) nameLen1;
+			features[9] = (nameLen1 - nameLen2) / (double) nameLen1;
 		else if (nameLen1 < nameLen2)
-			features[7] = -(nameLen2 - nameLen1) / (double) nameLen2;
+			features[9] = -(nameLen2 - nameLen1) / (double) nameLen2;
 		else
-			features[7] = 0d;
+			features[9] = 0d;
 
 		String repoName1 = resource.getRepos().get(id1).getReponame()
 				.toLowerCase();
@@ -343,26 +335,26 @@ public class RepoRanking {
 				.toLowerCase();
 		double ed1 = 1.0 / (double) (getLevenshteinDistance(query, repoName1) + 1);
 		double ed2 = 1.0 / (double) (getLevenshteinDistance(query, repoName2) + 1);
-		features[8] = ed1 - ed2;
-		features[9] = getMutualCoverage(repoName1, query)
+		features[10] = ed1 - ed2;
+		features[11] = getMutualCoverage(repoName1, query)
 				- getMutualCoverage(repoName2, query);
 
 		String[] queries = query.split("[\\s\\-_]");
-		features[10] = 0d; // id1项目的文档关键字交集
-		features[11] = 0d; // id2项目的文档关键字交集
+		features[12] = 0d; // id1项目的文档关键字交集
+		features[13] = 0d; // id2项目的文档关键字交集
 
 		for (String keyword : queries) {
 			if (resource.getTw().containsKey(keyword)) {
 				if (resource.getTw().get(keyword).containsKey(id1))
-					features[10] += (1 / (double) queries.length);
+					features[12] += (1 / (double) queries.length);
 				if (resource.getTw().get(keyword).containsKey(id2))
-					features[10] -= (1 / (double) queries.length);
+					features[12] -= (1 / (double) queries.length);
 			}
 			if (resource.getTt().containsKey(keyword)) {
 				if (resource.getTt().get(keyword).containsKey(id1))
-					features[11] += (1 / (double) queries.length);
+					features[13] += (1 / (double) queries.length);
 				if (resource.getTt().get(keyword).containsKey(id2))
-					features[11] -= (1 / (double) queries.length);
+					features[13] -= (1 / (double) queries.length);
 			}
 		}
 
@@ -372,48 +364,50 @@ public class RepoRanking {
 	public double[] getFeatures(String query, Map<Integer, Double> tagVec,
 			Map<Integer, Double> textVec, Map<Integer, Double> titleVec,
 			int id1, int id2) {
-		double[] features = new double[12];
+		double[] features = new double[14];
 		query = query.toLowerCase();
 
-		features[0] = (titleVec.containsKey(id1) ? titleVec.get(id1) : 0d); // id1项目的标题相似度
-		features[1] = (titleVec.containsKey(id2) ? titleVec.get(id2) : 0d); // id2项目的标题相似度
-
-		features[2] = (textVec.containsKey(id1) ? textVec.get(id1) : 0d); // id1项目的文本相似度
-		features[3] = (textVec.containsKey(id2) ? textVec.get(id2) : 0d); // id2项目的文本相似度
-
-		features[4] = (tagVec.containsKey(id1) ? tagVec.get(id1) : 0d); // id1项目的标签相似度
-		features[5] = (tagVec.containsKey(id2) ? tagVec.get(id2) : 0d); // id2项目的标签相似度
-
-		features[0] = features[0] - features[1];
-		features[1] = features[2] - features[3];
-		features[2] = features[4] - features[5];
+		double title1 = (titleVec.containsKey(id1) ? titleVec.get(id1) : 0d);
+		double title2 = (titleVec.containsKey(id2) ? titleVec.get(id2) : 0d);
+		
+		double text1 = (textVec.containsKey(id1) ? textVec.get(id1) : 0d);
+		double text2 = (textVec.containsKey(id2) ? textVec.get(id2) : 0d);
+		
+		double tag1 = (tagVec.containsKey(id1) ? tagVec.get(id1) : 0d);
+		double tag2 = (tagVec.containsKey(id2) ? tagVec.get(id2) : 0d);
+		
+		features[0] = title1 - title2;
+		features[1] = text1 - text2;
+		features[2] = tag1 - tag2;
+		features[3] = (text1 + tag1 - text1 * tag1) - (text2 + tag2 - text2 * tag2);
+		features[4] = Math.max(text1 + tag1 - text1 * tag1, title1) - Math.max(text2 + tag2 - text2 * tag2, title2);
 
 		if (edu.sjtu.core.resource.Resource.KS * resource.getRepos().get(id1).getStargazers() - edu.sjtu.core.resource.Resource.KS
 				* resource.getRepos().get(id2).getStargazers() > 0)
-			features[3] = 1d;
+			features[5] = 1d;
 		else if (edu.sjtu.core.resource.Resource.KS * resource.getRepos().get(id1).getStargazers() - edu.sjtu.core.resource.Resource.KS
 				* resource.getRepos().get(id2).getStargazers() < 0)
-			features[3] = -1d;
-		else
-			features[3] = 0d;
-
-		if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
-				* resource.getRepos().get(id2).getForks() > 0)
-			features[4] = 1d;
-		else if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
-				* resource.getRepos().get(id2).getForks() < 0)
-			features[4] = -1d;
-		else
-			features[4] = 0d;
-
-		if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
-				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) > 0)
-			features[5] = 1d;
-		else if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
-				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) < 0)
 			features[5] = -1d;
 		else
 			features[5] = 0d;
+
+		if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
+				* resource.getRepos().get(id2).getForks() > 0)
+			features[6] = 1d;
+		else if (edu.sjtu.core.resource.Resource.KF * resource.getRepos().get(id1).getForks() - edu.sjtu.core.resource.Resource.KF
+				* resource.getRepos().get(id2).getForks() < 0)
+			features[6] = -1d;
+		else
+			features[6] = 0d;
+
+		if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
+				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) > 0)
+			features[7] = 1d;
+		else if (Math.pow(2.0, -resource.getDayDiff(id1) / edu.sjtu.core.resource.Resource.KU)
+				- Math.pow(2.0, -resource.getDayDiff(id2) / edu.sjtu.core.resource.Resource.KU) < 0)
+			features[7] = -1d;
+		else
+			features[7] = 0d;
 		
 		int desLen1 = 0, desLen2 = 0;
 		if (resource.getRepos().get(id1).getDes() != null)
@@ -421,20 +415,20 @@ public class RepoRanking {
 		if (resource.getRepos().get(id2).getDes() != null)
 			desLen2 = resource.getRepos().get(id2).getDes().split("[\\s\\-_]").length;
 		if (desLen1 > desLen2)
-			features[6] = (desLen1 - desLen2) / (double) desLen1;
+			features[8] = (desLen1 - desLen2) / (double) desLen1;
 		else if (desLen1 < desLen2)
-			features[6] = -(desLen2 - desLen1) / (double) desLen2;
+			features[8] = -(desLen2 - desLen1) / (double) desLen2;
 		else
-			features[6] = 0d;
+			features[8] = 0d;
 
 		int nameLen1 = resource.getRepos().get(id1).getReponame().length();
 		int nameLen2 = resource.getRepos().get(id2).getReponame().length();
 		if (nameLen1 > nameLen2) // 项目名称字符串长度 若r_a的长度大于r_b，则设置为1，反之为0。
-			features[7] = (nameLen1 - nameLen2) / (double) nameLen1;
+			features[9] = (nameLen1 - nameLen2) / (double) nameLen1;
 		else if (nameLen1 < nameLen2)
-			features[7] = -(nameLen2 - nameLen1) / (double) nameLen2;
+			features[9] = -(nameLen2 - nameLen1) / (double) nameLen2;
 		else
-			features[7] = 0d;
+			features[9] = 0d;
 
 		String repoName1 = resource.getRepos().get(id1).getReponame()
 				.toLowerCase();
@@ -442,26 +436,26 @@ public class RepoRanking {
 				.toLowerCase();
 		double ed1 = 1.0 / (double) (getLevenshteinDistance(query, repoName1) + 1);
 		double ed2 = 1.0 / (double) (getLevenshteinDistance(query, repoName2) + 1);
-		features[8] = ed1 - ed2;
-		features[9] = getMutualCoverage(repoName1, query)
+		features[10] = ed1 - ed2;
+		features[11] = getMutualCoverage(repoName1, query)
 				- getMutualCoverage(repoName2, query);
 
 		String[] queries = query.split("[\\s\\-_]");
-		features[10] = 0d; // id1项目的文档关键字交集
-		features[11] = 0d; // id2项目的文档关键字交集
+		features[12] = 0d; // id1项目的文档关键字交集
+		features[13] = 0d; // id2项目的文档关键字交集
 
 		for (String keyword : queries) {
 			if (resource.getTw().containsKey(keyword)) {
 				if (resource.getTw().get(keyword).containsKey(id1))
-					features[10] += (1 / (double) queries.length);
+					features[12] += (1 / (double) queries.length);
 				if (resource.getTw().get(keyword).containsKey(id2))
-					features[10] -= (1 / (double) queries.length);
+					features[12] -= (1 / (double) queries.length);
 			}
 			if (resource.getTt().containsKey(keyword)) {
 				if (resource.getTt().get(keyword).containsKey(id1))
-					features[11] += (1 / (double) queries.length);
+					features[13] += (1 / (double) queries.length);
 				if (resource.getTt().get(keyword).containsKey(id2))
-					features[11] -= (1 / (double) queries.length);
+					features[13] -= (1 / (double) queries.length);
 			}
 		}
 
@@ -476,10 +470,9 @@ public class RepoRanking {
 		Date begin = new Date();
 		query = query.toLowerCase();
 		Map<String, Double> wordVec = queryExpansion.getWeightedQuery(query);
-
 		Map<Integer, Double> tagVec = zeroOne(computeCharacterSim(wordVec));
 		Map<Integer, Double> textVec = zeroOne(computeTextSim(wordVec));
-		Map<Integer, Double> titleVec = zeroOne(computeTitleSim(query));
+		Map<Integer, Double> titleVec = computeTitleSim(query);
 
 		RepoScore[] repoRelavences = new RepoScore[Size.Raw_Repo];
 		for (int i = 0; i < Size.Raw_Repo; i++) {
@@ -488,9 +481,15 @@ public class RepoRanking {
 				if (!tagVec.containsKey(id) && !textVec.containsKey(id) && !titleVec.containsKey(id))
 					repoRelavences[i] = new RepoScore(id, 0.0);
 				else {
-					repoRelavences[i] = new RepoScore(id,
-							((1.0 + (tagVec.containsKey(id) ? tagVec.get(id) : 0.0)) * (1.0 + (textVec.containsKey(id) ? textVec.get(id) : 0.0)) * (1.0 + (titleVec
-									.containsKey(id) ? titleVec.get(id) : 0.0))));
+//					repoRelavences[i] = new RepoScore(id,
+//							((1.0 + (tagVec.containsKey(id) ? tagVec.get(id) : 0.0)) * (1.0 + (textVec.containsKey(id) ? textVec.get(id) : 0.0)) * (1.0 + (titleVec
+//									.containsKey(id) ? titleVec.get(id) : 0.0))));
+					double text = (textVec.containsKey(id) ? textVec.get(id) : 0.0);
+					double tag = (tagVec.containsKey(id) ? tagVec.get(id) : 0.0) * 0.2;
+					double title = (titleVec.containsKey(id) ? titleVec.get(id) : 0.0);
+					double score = Math.max(text + tag - text * tag, title);
+					
+					repoRelavences[i] = new RepoScore(id,score);
 					
 //					if(Double.isNaN(repoRelavences[i].getScore()))
 //					{
@@ -506,7 +505,14 @@ public class RepoRanking {
 		
 		// 基于相关度值对所有资源排序
 		Arrays.sort(repoRelavences, new RepoScore());
-
+		
+//		for(int i = 0 ; i < repoRelavences.length; i++)
+//		{
+//			System.out.println(repoRelavences[i].getId() + " " + textVec.get(repoRelavences[i].getId()) + " " + tagVec.get(repoRelavences[i].getId()) + " " + titleVec.get(repoRelavences[i].getId()));
+//			if(repoRelavences[i].getId() == 51997)
+//				break;
+//		}
+		
 		RepoScore[] repoScoresWithEffect = new RepoScore[top * 2];
 		for (int i = 0; i < top * 2; i++) {
 			// System.out.println("rev_"+ (i+1)
@@ -643,7 +649,8 @@ public class RepoRanking {
 		edu.sjtu.core.resource.Resource r = new edu.sjtu.core.resource.Resource();
 		QueryExpansion q = new QueryExpansion(r);
 		RepoRanking repoRanking = new RepoRanking(r, q);
-		System.out.println(Arrays.toString(repoRanking.getFeatures("unit test",
-				64212, 410673)));
+		repoRanking.rankScore("ruby orm", 100, false);
+//		System.out.println(Arrays.toString(repoRanking.getFeatures("unit test",
+//				64212, 410673)));
 	}
 }

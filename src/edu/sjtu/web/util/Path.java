@@ -8,9 +8,13 @@ public class Path {
 //	public final static String resPath = "L:\\res\\";
 	
 	//笔记本配置
-	public final static String logPath = "G:\\res\\log\\";
-	public final static String resPath = "G:\\res\\";
-	public final static String bigResPath = "G:\\res\\";
+//	public final static String logPath = "G:\\res\\log\\";
+//	public final static String resPath = "G:\\res\\";
+//	public final static String bigResPath = "G:\\res\\";
+	
+	public final static String logPath = "L:\\res\\log\\";
+	public final static String resPath = "L:\\res\\";
+	public final static String bigResPath = "L:\\res\\";
 
 	//服务器配置
 //	public final static String logPath = "E:\\cxy\\greta-data\\log\\";  //保存评分记录的位置
